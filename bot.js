@@ -52,8 +52,8 @@ This bot demonstrates many of the core features of Botkit:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // grab env variables
-var env = require('node-env-file');
-env(__dirname + '/.env');
+// var env = require('node-env-file');
+// env(__dirname + '/.env');
 
 // checkout dem kewl env vars
 if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET || !process.env.PORT) {
