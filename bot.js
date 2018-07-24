@@ -65,7 +65,7 @@ var debug = require('debug')('botkit:main');
 var bot_options = {
     clientId: process.env.SLACK_APP_ID,
     clientSecret: process.env.SLACK_APP_SECRET,
-    // debug: true,
+    debug: true,
     scopes: ['bot'],
     studio_token: process.env.BOTKIT_STUDIO_TOKEN
 };
@@ -104,8 +104,6 @@ if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET) {
       layout: 'layouts/default'
     });
   })
-
-  console.log('~~~~~HERE~~~~~');
   // Set up a simple storage backend for keeping a record of customers
   // who sign up for the app via the oauth
   require(__dirname + '/components/user_registration.js')(controller);
