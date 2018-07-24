@@ -51,10 +51,6 @@ This bot demonstrates many of the core features of Botkit:
     -> http://howdy.ai/botkit
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-// grab env variables
-// var env = require('node-env-file');
-// env(__dirname + '/.env');
-
 // checkout dem kewl env vars
 if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET || !process.env.PORT) {
   usage_tip();
@@ -79,8 +75,8 @@ var bot_options = {
 // ~~~~~~~~~~~~~
 // Use a mongo database if specified, otherwise store in a JSON file local to the app.
 // Mongo is automatically configured when deploying to Heroku
-if (process.env.MONGO_URI) {
-    var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGO_URI});
+if (process.env.MONGOLAB_NAVY_URI) {
+    var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGOLAB_NAVY_URI});
     bot_options.storage = mongoStorage;
 } else {
     bot_options.json_file_store = __dirname + '/.data/db/'; // store user data in a simple JSON format
