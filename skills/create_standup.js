@@ -24,16 +24,21 @@ module.exports = function(controller) {
  				channel.id = message.channel;
  				channel.standups = [];
 
+ 				newStandup = {};
+ 				newStandup.id = 'standup_' + (channel.standups.length + 1).toString();
+
+ 				channel.standups.push(newStandup);
+
  				controller.storage.channels.save(channel, function(err, channel) {
 		 			if (err) {
 		        bot.reply(message, 'I experienced an error adding the channel: ' + err);
 		      } else {
-		      	log.info('channel has been successfully stored - ' + channel);
+		      	log.info('channel has been successfully stored');
 		      	log.info(channel.standups);
 		      }
 		 		});
  			} else {
- 				log.info('channel is present - ' + channel);
+ 				log.info('channel is present');
 
  				newStandup = {};
  				newStandup.id = 'standup_' + (channel.standups.length + 1).toString();
@@ -45,8 +50,9 @@ module.exports = function(controller) {
  						bot.reply(message, 'I experienced an error saving this channel: ' + err);
  						log.error(err);
  					} else {
- 						log.info('channel has been successfully saved - ' + channel);
-		      	log.info(channel.standups);	
+ 						bot.reply(message, 'Got it. Standup scheduled! :thumbsup:');
+ 						log.info('channel has been successfully saved');
+		      	log.info(channel);	
  					}
  				})
  			}
