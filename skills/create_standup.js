@@ -18,10 +18,10 @@ module.exports = function(controller) {
 		// store channel
  		controller.storage.channels.get(message.channel, function(err, channel) {
  			if (!channel) {
- 				log.error('channel is not present - ' + err);
+ 				log.error('channel is not present');
  				// new channel object
  				channel = {};
- 				channel.id = messsage.channel;
+ 				channel.id = message.channel;
  				channel.standups = [];
 
  				controller.storage.channels.save(channel, function(err, channel) {
