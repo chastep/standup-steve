@@ -10,12 +10,12 @@ var log = require('../logger')('create standup: ');
 module.exports = function(controller) {
 
 	controller.hears(['(schedule|create|move) standup (.*)'], 'direct_mention', function(bot, message) {
-		log.verbose('Heard this request: ' + message.match[0]);
+		log.verbose('Heard this request - ' + message.match[0]);
 		log.verbose(`~~~~~~~~~~~~~~~~~~`);
 		log.verbose(message);
 		log.verbose(`~~~~~~~~~~~~~~~~~~`);
 
-		controller.storage.channel.get(message.channel, function(err, channel) {
+		controller.storage.channels.get(message.channel, function(err, channel) {
 			log.verbose(channel);
 		})
 
