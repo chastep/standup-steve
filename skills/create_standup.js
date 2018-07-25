@@ -5,19 +5,17 @@
 // 3. creates corresponding timers
 // 
 
-var log = require('../logger')('create standup');
+var log = require('../logger')('create standup: ');
 
 module.exports = function(controller) {
 
-	controller.hears(['(schedule|create|move) standup (.*)'], 'direct_mention,direct_message', function(bot, message) {
-		log.verbose('Heard a request to create a standup: ' + message.match[0]);
+	controller.hears(['(schedule|create|move) standup (.*)'], 'direct_mention', function(bot, message) {
+		log.verbose('Heard this request: ' + message.match[0]);
 		log.verbose(`~~~~~~~~~~~~~~~~~~`);
-		console.log(message);
 		log.verbose(message);
 		log.verbose(`~~~~~~~~~~~~~~~~~~`);
 
 		controller.storage.channel.get(message.channel, function(err, channel) {
-			console.log(channel);
 			log.verbose(channel);
 		})
 
