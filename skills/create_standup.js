@@ -6,7 +6,7 @@
 // 
 
 var log = require('../logger')('create standup: ');
-var timeHelper = require('../helpers').time;
+var timeHelper = require('../helpers/time.js');
 
 function createNewStandup(channel) {
 	newStandup = {};
