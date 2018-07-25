@@ -64,13 +64,45 @@ if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET || !process.env.P
 var Botkit = require('botkit');
 var debug = require('debug')('botkit:main');
 
+// logger setup
+var bkLogger = require('./logger')('botkit');
+function bkLog(level) {
+  var args = [ ];
+  for(var i = 1; i < arguments.length; i++) {
+    args.push(arguments[i]);
+  }
+
+  // Remap botkit log levels
+  if(level === 'debug') {
+    return;
+  }
+  else if(level === 'info') {
+    level = 'verbose';
+  } else if(level === 'notice') {
+    level = 'info';
+  }
+
+  var fn, thisObj;
+  if(bkLogger[level]) {
+    fn = bkLogger[level];
+    thisObj = bkLogger;
+  } else {
+    fn = console.log;
+    thisObj = console;
+    args.unshift('[' + level + ']');
+  }
+
+  fn.apply(thisObj, args);
+}
+
 // botkit options, configurable
 var bot_options = {
-    clientId: process.env.SLACK_APP_ID,
-    clientSecret: process.env.SLACK_APP_SECRET,
-    debug: true,
-    scopes: ['bot'],
-    studio_token: process.env.BOTKIT_STUDIO_TOKEN
+  clientId: process.env.SLACK_APP_ID,
+  clientSecret: process.env.SLACK_APP_SECRET,
+  debug: false,
+  logger: { log: bkLog },
+  scopes: ['bot'],
+  studio_token: process.env.BOTKIT_STUDIO_TOKEN
 };
 
 // ~~~~~~~~~~~~~
@@ -79,13 +111,13 @@ var bot_options = {
 // Use a mongo database if specified, otherwise store in a JSON file local to the app.
 // Mongo is automatically configured when deploying to Heroku
 if (process.env.MONGOLAB_NAVY_URI) {
-    var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGOLAB_NAVY_URI});
-    bot_options.storage = mongoStorage;
+  var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGOLAB_NAVY_URI});
+  bot_options.storage = mongoStorage;
 } else {
-    bot_options.json_file_store = __dirname + '/.data/db/'; // store user data in a simple JSON format
+  bot_options.json_file_store = __dirname + '/.data/db/'; // store user data in a simple JSON format
 }
 
-// Create the Botkit controller, which controls all instances of the bot.
+// Create the Botkit controller, which controls all instances of the bot with the options defined above.
 var controller = Botkit.slackbot(bot_options);
 
 // idk what this does...
@@ -117,10 +149,12 @@ if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET) {
   // enable advanced botkit studio metrics
   require('botkit-studio-metrics')(controller);
 
+  // loads all skills present
   var normalizedPath = require("path").join(__dirname, "skills");
   require("fs").readdirSync(normalizedPath).forEach(function(file) {
     require("./skills/" + file)(controller);
   });
+  log.verbose('All bot skills loaded :D');
 
   // This captures and evaluates any message sent to the bot as a DM
   // or sent to the bot in the form "@bot message" and passes it to
@@ -144,7 +178,8 @@ if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET) {
         }
       }).catch(function(err) {
         bot.reply(message, 'I experienced an error with a request to Botkit Studio: ' + err);
-        debug('Botkit Studio: ', err);
+        // debug('Botkit Studio: ', err);
+        log.error(err);
       });
     });
   } else {
