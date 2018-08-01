@@ -5,7 +5,7 @@
 // 3. creates corresponding timers
 // 
 
-var log = require('../logger')('create standup: ');
+var log = require('../logger')('custom:create standup:');
 var timeHelper = require('../helpers/time.js');
 
 function createNewStandup(channel, schedule) {
