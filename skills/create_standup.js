@@ -1,11 +1,10 @@
 // 
 // this process will create a daily standup that:
-// 1. creates a standup object (with relevant attributes - TBD)
-// 2. saves it in storage (with relevant attributes - TBD)
-// 3. creates corresponding timers
+// 1. creates a standup object (with relevant attributes)
+// 2. saves it in storage (with relevant attributes)
 // 
 
-var log = require('../logger')('custom:create standup:');
+var log = require('../logger')('custom:create_standup:');
 var timeHelper = require('../helpers/time.js');
 
 function createNewStandup(channel, schedule) {

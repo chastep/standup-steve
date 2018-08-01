@@ -80,7 +80,7 @@ function getDisplayFormat(time) {
   return moment.tz(time, 'HHmm', timezone).format('h:mm a z');
 }
 
-function getDisplayFormatForDaysOfChannel(channel) {
+function getDisplayFormatForDaysOfChannel(days) {
   const days = []
   const dow = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
   dow.forEach(function (day) {
