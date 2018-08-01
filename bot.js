@@ -52,6 +52,7 @@ This bot demonstrates many of the core features of Botkit:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var log = require('./logger')('app');
+var schedule = require('node-schedule');
 
 // this is necessary for local development
 require('dotenv').config()
@@ -125,6 +126,12 @@ if (process.env.SLACK_TOKEN) {
           require("./skills/" + file)(controller);
         });
         log.verbose('All bot skills loaded :D');
+
+        // Set up cron job to check every minute for channels that need a standup report
+        botRunners = require('./runners');
+        schedule.scheduleJob('* * * * 1-5', botRunners.getReportsRunner(bot));
+        // schedule.scheduleJob('* * * * 1-5', bot.getReminderRunner(bot));
+        log.verbose('All bot jobs scheduled :D');
       });
     };
   });
@@ -187,6 +194,11 @@ if (process.env.SLACK_TOKEN) {
       require("./skills/" + file)(controller);
     });
     log.verbose('All bot skills loaded :D');
+
+    // Set up cron job to check every minute for channels that need a standup report
+    schedule.scheduleJob('* * * * 1-5', bot.getReportRunner(bot));
+    // schedule.scheduleJob('* * * * 1-5', bot.getReminderRunner(bot));
+    log.verbose('All bot jobs scheduled :D');
 
     // This captures and evaluates any message sent to the bot as a DM
     // or sent to the bot in the form "@bot message" and passes it to

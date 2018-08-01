@@ -4,7 +4,7 @@
 
 var log = require('../logger')('custom:remove_standup:');
 var timeHelper = require('../helpers/time.js');
-var _ = require('underscore');
+var _ = require('lodash');
 
 function removeStandup(bot, message) {
   log.verbose('Heard a request to remove a standup: \n' + message.match[0]);
