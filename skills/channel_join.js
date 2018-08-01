@@ -14,6 +14,7 @@ module.exports = function(controller) {
 
  				channel = {};
  				channel.id = message.channel;
+ 				channel.reminderMinutes = 60;
 
  				controller.storage.channels.save(channel, function(err, channel) {
 		 			if (err) {
