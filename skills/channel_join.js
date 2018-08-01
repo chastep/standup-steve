@@ -13,6 +13,7 @@ function joinChannel(controller) {
 
 				channel = {};
 				channel.id = message.channel;
+				channel.standup = {};
 				channel.reminderMinutes = 60;
 
 				controller.storage.channels.save(channel, function(err, channel) {
