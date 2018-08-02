@@ -30,7 +30,7 @@ function joinChannel(bot, message) {
 			channel.id = message.channel;
 			channel.name = await fetchChannelNameFromApi(bot, message);
 			channel.standup = {};
-			channel.reminderMinutes = 60;
+			channel.reminderMinutes = 30;
 
 			bot.botkit.storage.channels.save(channel, function(err, channel) {
 	 			if (err) {
