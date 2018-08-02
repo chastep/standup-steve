@@ -4,6 +4,13 @@ var timezone = process.env.TIMEZONE || 'America/Chicago';
 function getTimeFromString(str) {
   var time = str.match(/((\d+|:)*(\s)?((a|p)m)|\d{4})/gi);
   var daysPortion = str.replace(time, '').trim();
+  var daysOfTheWeek = [
+                        { regex: 'm(o|onday)?', day: 'Monday' },
+                        { regex: 't(u|uesday)?', day: 'Tuesday' },
+                        { regex: 'w(e|ednesday)?', day: 'Wednesday' },
+                        { regex: 'th(ursday)?', day: 'Thursday' },
+                        { regex: 'f(r|riday)?', day: 'Friday' }
+                      ]
 
   if(time) {
     // Assume incoming strings are in the standard timezone
@@ -16,13 +23,7 @@ function getTimeFromString(str) {
 
     if(time.isValid()) {
       var gotOneDay = false;
-      [
-        { regex: 'm(o|onday)?', day: 'Monday' },
-        { regex: 't(u|uesday)?', day: 'Tuesday' },
-        { regex: 'w(e|ednesday)?', day: 'Wednesday' },
-        { regex: 'th(ursday)?', day: 'Thursday' },
-        { regex: 'f(r|riday)?', day: 'Friday' }
-      ].forEach(function(weekday) {
+      daysOfTheWeek.forEach(function(weekday) {
         if((new RegExp(`(^|\\s)${weekday.regex}($|\\s)`, 'i')).test(daysPortion)) {
           output.days.push(weekday.day);
           gotOneDay = true;
@@ -79,7 +80,7 @@ function getDisplayFormat(time) {
   return moment.tz(time, 'HHmm', timezone).format('h:mm a z');
 }
 
-function getDisplayFormatForDaysOfChannel(channel) {
+function getDisplayFormatForDaysOfChannel(days) {
   const days = []
   const dow = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
   dow.forEach(function (day) {
