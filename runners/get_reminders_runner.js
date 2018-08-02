@@ -49,23 +49,26 @@ function runReminders(bot) {
           text: '<!here> :hourglass: There\'s a standup in '+channel.reminderMinutes+' minutes! '+
              'To submit your standup, DM me! Or, add any emoji to this message and I\'ll DM you to get your standup info.',
           attachments: [],
-          channel: channel.name
+          channel: channel.id
         };
         bot.say(reminder, function(err, response) {
-        	log.info(response);
+        	if (err) {
+            log.error('Error sending reminder: ', err);
+            return;
+          }
         	log.verbose('Sending channel reminder :D - ' + channel.name);
           if(!err) {
           	log.info(bot);
             bot.api.reactions.add({
               name: 'wave',
-              channel: channel.name,
+              channel: channel.id,
               timestamp: response.message.ts
             });
           }
         });
       });
     } else {
-    	log.info('There are no channels eligible for reminding - PEACE');
+    	log.verbose('There are no channels eligible for reminding - PEACE');
     }
   });
 }

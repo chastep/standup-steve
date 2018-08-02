@@ -50,7 +50,7 @@ function runReports(bot) {
         // channelReportHelper.doChannelReport(bot, channel, false);
       });
     } else {
-      log.info('There are no channels eligible for reporting - PEACE');
+      log.verbose('There are no channels eligible for reporting - PEACE');
     }
   });
 }
