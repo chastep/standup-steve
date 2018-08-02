@@ -28,7 +28,6 @@ function runReports(bot) {
   bot.botkit.storage.channels.all(function(err, channels) {
     if (err) {
       log.error('Encountered error trying to get all channels: ', err);
-      return;
     }
 
     if(channels.length > 0) {
@@ -37,7 +36,7 @@ function runReports(bot) {
       // Iterate over the channels
       _.each(channels, function(channel) {
         console.log(channel);
-        // channelReportHelper.doChannelReport(bot, channel, false);
+        channelReportHelper.doChannelReport(bot, channel, false);
       });
     } else {
       log.info('There are no channels :/ PEACE');

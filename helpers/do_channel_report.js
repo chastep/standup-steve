@@ -17,19 +17,26 @@ function doChannelReport(bot, channel, update) {
       log.error('channel is not present: ' + err);
     } else {
       log.info('channel is present');
-      var standup = channel.standup
-      async.series([
-        function(callback) {
-          if (update) {
-            log.info('updating exiting channel standup report');
-            updateChannelReport(bot, channel, standup, userName);
-          } else {
-            log.info('creating channel standup report');
-            createNewChannelReport(bot, channel, standup);
-          }
-          callback(null);
-        }, function () {}
-      ]);
+      bot.botkit.storage.standups.all(function(err, standups) {
+        if (err) {
+          log.error('Encountered error trying to get all standups: ', err);
+        }
+        // ~~~~~~~~~~~~~~
+        // logic here to find all standups (standup responses) for the associated channel
+        // ~~~~~~~~~~~~~~
+        async.series([
+          function(callback) {
+            if (update) {
+              log.info('updating exiting channel standup report');
+              updateChannelReport(bot, channel, standups, userName);
+            } else {
+              log.info('creating channel standup report');
+              createNewChannelReport(bot, channel, standups);
+            }
+            callback(null);
+          }, function () {}
+        ]);
+      })
     };
   });
 };
