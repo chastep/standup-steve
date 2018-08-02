@@ -197,8 +197,12 @@ if (process.env.SLACK_TOKEN) {
 
     // Set up cron job to check every minute for channels that need a standup report
     botRunners = require('./runners');
-    schedule.scheduleJob('* * * * 1-5', botRunners.getReportsRunner(controller));
-    schedule.scheduleJob('* * * * 1-5', botRunners.getRemindersRunner(controller));
+    var prodBot = controller.spawn({
+      clientId: process.env.SLACK_APP_ID,
+      clientSecret: process.env.SLACK_APP_SECRET
+    });
+    schedule.scheduleJob('* * * * 1-5', botRunners.getReportsRunner(prodBot));
+    schedule.scheduleJob('* * * * 1-5', botRunners.getRemindersRunner(prodBot));
     // schedule.scheduleJob('* * * * 1-5', bot.getReminderRunner(bot));
     log.verbose('All bot jobs scheduled :D');
 
