@@ -11,7 +11,7 @@ var fedHolidays = require('@18f/us-federal-holidays');
 function collectTimeMatchedChannels(channels, where) {
   var selected = []
   _.each(channels, function(channel) {
-    if (!_.isEmpty(channel.standup)) {
+    if (_.isEmpty(channel.standup)) {
       return;
     } else if (channel.standup.time === where.time && _.includes(channel.standup.days, where.day)) {
       selected.push(channel)
