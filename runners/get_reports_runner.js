@@ -8,10 +8,20 @@ var timeHelper = require('../helpers/time.js');
 var channelReportHelper = require('../helpers/do_channel_report.js');
 var fedHolidays = require('@18f/us-federal-holidays');
 
-function runReports(bot) {
-  log.verbose('Attempting to run standup reports :D');
+function collectTimeMatchedChannels(channels, where) {
+  var selected = []
+  _.each(channels, function(channel) {
+    if (!_.isEmpty(channel.standup)) {
+      return;
+    } else if (channel.standup.time === where.time && _.includes(channel.standup.days, where.day)) {
+      selected.push(channel)
+    }
+  });
+  return selected;
+}
 
-  var time = timeHelper.getScheduleFormat();
+function runReports(bot) {
+  log.verbose('Attempting to run channel standup reports :D');
 
   // Don't run if today is a federal holiday
   if(fedHolidays.isAHoliday()) {
@@ -19,27 +29,28 @@ function runReports(bot) {
   }
 
   var where = {
-    time: time
+    time: timeHelper.getScheduleFormat(),
+    day: timeHelper.getScheduleDay()
   };
 
-  where[timeHelper.getScheduleDay()] = true;
-
-  // store channel
-  bot.botkit.storage.channels.all(function(err, channels) {
+  bot.botkit.storage.channels.all(async function(err, channels) {
     if (err) {
       log.error('Encountered error trying to get all channels: ', err);
+      return;
     }
 
-    if(channels.length > 0) {
+    var selected_channels = await collectTimeMatchedChannels(channels, where);
+
+    if(selected_channels.length > 0) {
       log.info('Reporting standups for ' + channels.length + ' channel(s)');
 
       // Iterate over the channels
-      _.each(channels, function(channel) {
+      _.each(selected_channels, function(channel) {
         console.log(channel);
-        channelReportHelper.doChannelReport(bot, channel, false);
+        // channelReportHelper.doChannelReport(bot, channel, false);
       });
     } else {
-      log.info('There are no channels :/ PEACE');
+      log.info('There are no channels eligible for reporting - PEACE');
     }
   });
 }
