@@ -4,7 +4,7 @@
 // 2. saves it in storage (with relevant attributes)
 // 
 
-var log = require('../logger')('custom:create_standup:');
+var log = require('../logger')('custom:create_channel_standup:');
 var timeHelper = require('../helpers/time.js');
 
 function createNewStandup(channel, schedule) {
@@ -16,7 +16,7 @@ function createNewStandup(channel, schedule) {
 	return newStandup;
 }
 
-function createStandup(bot, message) {
+function createChannelStandup(bot, message) {
 	log.verbose('Heard this request - ' + message.match[0]);
 
 	// store channel
@@ -40,7 +40,7 @@ function createStandup(bot, message) {
 					} else {
 						bot.reply(message, 'Got it. Standup scheduled for ' + timeHelper.getDisplayFormat(channel.standup.time) + ' on ' + timeHelper.getDisplayFormatForDays(channel.standup.days) + ' :thumbsup:')
 						log.info('Standup scheduled for ' + message.channel + ' at ' + timeHelper.getDisplayFormat(channel.standup.time) + ' on ' + timeHelper.getDisplayFormatForDays(channel.standup.days));
-						log.info('channel has been successfully saved');
+						log.info('channel has been successfully updated');
 	      		log.info(channel);	
 					}
 				})
@@ -52,9 +52,9 @@ function createStandup(bot, message) {
 	});
 };
 
-function attachCreateStandupListener(controller) {
-	controller.hears(['(schedule|create|move) standup (.*)'], 'direct_mention', createStandup);
+function attachCreateChannelStandupListener(controller) {
+	controller.hears(['(schedule|create|move) standup (.*)'], 'direct_mention', createChannelStandup);
 	log.verbose('ATTACHED');
 };
 
-module.exports = attachCreateStandupListener;
+module.exports = attachCreateChannelStandupListener;

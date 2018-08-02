@@ -17,7 +17,7 @@ function gatherChannelStandupsAsAttachments(channel, standups) {
   attachments.unshift({
     fallback: defaultMessage(channelName),
     pretext:  defaultMessage(channelName),
-    title:    'Summary',
+    title:    'Summary'
     // fields:   generateFields(attachments)
   });
 
