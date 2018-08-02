@@ -9,13 +9,12 @@ const timeHelper = require('./time.js');
 const createNewChannelReport = require('./create_new_channel_report.js');
 // const updateChannelReport = require('./updateChannelReport');
 
-function doChannelReport(bot, channel, update, actionCallback) {
-  var actionCallback = actionCallback || function () {};
+function doChannelReport(bot, channel, update) {
+  log.verbose('Attempting to run standup report for ' + channel.name);
 
   bot.botkit.storage.channels.get(channel, function(err, channel) {
     if (!channel) {
-      bot.reply(message, 'I experienced an error finding this channel: ' + err);
-      log.error('channel is not present!');
+      log.error('channel is not present: ' + err);
     } else {
       log.info('channel is present');
       var standup = channel.standup
@@ -29,7 +28,7 @@ function doChannelReport(bot, channel, update, actionCallback) {
             createNewChannelReport(bot, channel, standup);
           }
           callback(null);
-        }, actionCallback
+        }, function () {}
       ]);
     };
   });

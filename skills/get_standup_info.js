@@ -4,6 +4,7 @@
 
 var log = require('../logger')('custom:get_standup:');
 var timeHelper = require('../helpers/time.js');
+var _ = require('lodash');
 
 function getStandupInfo(bot, message) {
   log.verbose('Heard this request - ' + message.match[0]);
@@ -15,10 +16,10 @@ function getStandupInfo(bot, message) {
     } else {
       log.info('channel is present');
       console.log(channel);
-      if (channel.standup) {
-        bot.reply(message, 'There\'s a standup scheduled for '+ timeHelper.getDisplayFormat(channel.standup.time) + ' on ' + timeHelper.getDisplayFormatForDays(channel.standup.days));
-      } else {
+      if (_.isEmpty(channel.standup)) {
         bot.reply(message, 'There\'s no standup scheduled yet.');
+      } else {
+        bot.reply(message, 'There\'s a standup scheduled for '+ timeHelper.getDisplayFormat(standup.time) + ' on ' + timeHelper.getDisplayFormatForDays(standup.days));
       }
     }
   });

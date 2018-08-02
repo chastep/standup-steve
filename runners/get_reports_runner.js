@@ -9,6 +9,8 @@ var channelReportHelper = require('../helpers/do_channel_report.js');
 var fedHolidays = require('@18f/us-federal-holidays');
 
 function runReports(bot) {
+  log.verbose('Attempting to run standup reports :D');
+
   var time = timeHelper.getScheduleFormat();
 
   // Don't run if today is a federal holiday
@@ -24,14 +26,21 @@ function runReports(bot) {
 
   // store channel
   bot.botkit.storage.channels.all(function(err, channels) {
+    if (err) {
+      log.error('Encountered error trying to get all channels: ', err);
+      return;
+    }
+
     if(channels.length > 0) {
       log.info('Reporting standups for ' + channels.length + ' channel(s)');
 
       // Iterate over the channels
       _.each(channels, function(channel) {
         console.log(channel);
-        // channelReportHelper.doChannelReport(bot, channel.name, false);
+        // channelReportHelper.doChannelReport(bot, channel, false);
       });
+    } else {
+      log.info('There are no channels :/ PEACE');
     }
   });
 }

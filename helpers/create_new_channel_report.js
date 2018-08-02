@@ -6,7 +6,7 @@ const log = require('../logger')('custom:create_channel_report:');
 // const reportForChannel = require('./reports/for_channel.js');
 
 function createNewChannelReport(bot, channel, standup) {
-  let report = reportForChannel(channel, standup);
+  // let report = reportForChannel(channel, standup);
 
   log.verbose('Sending report for ' + channel.name);
 
@@ -18,17 +18,17 @@ function createNewChannelReport(bot, channel, standup) {
     channel: channel.name
   };
 
-  bot.say(standupNotice, (err, threadResponse) => {
-    bot.replyInThread(threadResponse, report, function(err, response) {
-      if (err) {
-        console.log(err);
-      } else {
-        channel.update({
-          latestReport: response.ts
-        });
-      }
-    });
-  });
+  // bot.say(standupNotice, (err, threadResponse) => {
+  //   bot.replyInThread(threadResponse, report, function(err, response) {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       channel.update({
+  //         latestReport: response.ts
+  //       });
+  //     }
+  //   });
+  // });
 };
 
 module.exports = {
