@@ -1,7 +1,7 @@
-// 
+//
 // this process kicks off the reporting process for all channels
 // can either create a new report process or update and exiting channel report
-// 
+//
 
 const async = require('async');
 const log = require('../logger')('custom:do_channel_report:');
@@ -10,14 +10,14 @@ const createNewChannelReport = require('./create_new_channel_report.js');
 // const updateChannelReport = require('./updateChannelReport');
 
 function doChannelReport(bot, channel, update) {
-  log.verbose('Attempting to run standup report for ' + channel.name);
+  log.verbose(`Attempting to run standup report for ${channel.name}`);
 
-  bot.botkit.storage.channels.get(channel, function(err, channel) {
+  bot.botkit.storage.channels.get(channel, (err, channel) => {
     if (!channel) {
-      log.error('channel is not present: ' + err);
+      log.error(`channel is not present: ${err}`);
     } else {
       log.info('channel is present');
-      bot.botkit.storage.standups.all(function(err, standups) {
+      bot.botkit.storage.standups.all((err, standups) => {
         if (err) {
           log.error('Encountered error trying to get all standups: ', err);
         }
@@ -25,7 +25,7 @@ function doChannelReport(bot, channel, update) {
         // logic here to find all standups (standup responses) for the associated channel
         // ~~~~~~~~~~~~~~
         async.series([
-          function(callback) {
+          function (callback) {
             if (update) {
               log.info('updating exiting channel standup report');
               updateChannelReport(bot, channel, standups, userName);
@@ -34,13 +34,13 @@ function doChannelReport(bot, channel, update) {
               createNewChannelReport(bot, channel, standups);
             }
             callback(null);
-          }, function () {}
+          }, function () {},
         ]);
-      })
-    };
+      });
+    }
   });
-};
+}
 
 module.exports = {
-  doChannelReport: doChannelReport
+  doChannelReport,
 };

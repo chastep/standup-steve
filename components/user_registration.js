@@ -1,16 +1,16 @@
-var log = require('../logger')('botkit:user_registration');
+const log = require('../logger')('botkit:user_registration');
 
-module.exports = function(controller) {
+module.exports = function (controller) {
   /* Handle event caused by a user logging in with oauth */
-  controller.on('oauth:success', function(payload) {
-    log.verbose('Got a successful login! - ' + payload);
-    
+  controller.on('oauth:success', (payload) => {
+    log.verbose(`Got a successful login! - ${payload}`);
+
     if (!payload.identity.team_id) {
-      log.error('Received an oauth response without a team id: ' + payload);
+      log.error(`Received an oauth response without a team id: ${payload}`);
     }
-    controller.storage.teams.get(payload.identity.team_id, function(err, team) {
+    controller.storage.teams.get(payload.identity.team_id, (err, team) => {
       if (err) {
-        log.error('Could not load team from storage system: ' + err);
+        log.error(`Could not load team from storage system: ${err}`);
       }
 
       var new_team = false;
@@ -21,7 +21,7 @@ module.exports = function(controller) {
           url: payload.identity.url,
           name: payload.identity.team,
         };
-        var new_team= true;
+        var new_team = true;
       }
 
       team.bot = {
@@ -31,11 +31,11 @@ module.exports = function(controller) {
         app_token: payload.access_token,
       };
 
-      var testbot = controller.spawn(team.bot);
+      const testbot = controller.spawn(team.bot);
 
-      testbot.api.auth.test({}, function(err, bot_auth) {
+      testbot.api.auth.test({}, (err, bot_auth) => {
         if (err) {
-          log.error('Could not authenticate bot user: ' + err);
+          log.error(`Could not authenticate bot user: ${err}`);
         } else {
           team.bot.name = bot_auth.user;
 
@@ -49,15 +49,13 @@ module.exports = function(controller) {
 
           // Replace this with your own database!
 
-          controller.storage.teams.save(team, function(err, id) {
+          controller.storage.teams.save(team, (err, id) => {
             if (err) {
-              log.error('Could not save team record: ' + err);
+              log.error(`Could not save team record: ${err}`);
+            } else if (new_team) {
+              controller.trigger('create_team', [testbot, team]);
             } else {
-              if (new_team) {
-                controller.trigger('create_team', [testbot, team]);
-              } else {
-                controller.trigger('update_team', [testbot, team]);
-              }
+              controller.trigger('update_team', [testbot, team]);
             }
           });
         }
@@ -66,23 +64,20 @@ module.exports = function(controller) {
   });
 
 
-  controller.on('create_team', function(bot, team) {
-    log.verbose('Team created: ' + team);
+  controller.on('create_team', (bot, team) => {
+    log.verbose(`Team created: ${team}`);
 
     // Trigger an event that will establish an RTM connection for this bot
     controller.trigger('rtm:start', [bot.config]);
 
     // Trigger an event that will cause this team to receive onboarding messages
     controller.trigger('onboard', [bot, team]);
-
   });
 
 
-  controller.on('update_team', function(bot, team) {
-    log.verbose('Team updated: ' + team);
+  controller.on('update_team', (bot, team) => {
+    log.verbose(`Team updated: ${team}`);
     // Trigger an event that will establish an RTM connection for this bot
     controller.trigger('rtm:start', [bot]);
-
   });
-
-}
+};
