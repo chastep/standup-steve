@@ -19,7 +19,7 @@ function collectTimeMatchedChannels(channels, where) {
   return selected;
 }
 
-function runReminders(controller) {
+function runReminders(bot) {
   log.verbose('Attempting to run channel reminders :D');
 
   // Don't run if today is a federal holiday
@@ -31,14 +31,6 @@ function runReminders(controller) {
     time: timeHelper.getScheduleFormat(),
     day: _.upperFirst(timeHelper.getScheduleDay()),
   };
-
-  const bot = controller.spawn({
-    clientId: process.env.SLACK_APP_ID,
-    clientSecret: process.env.SLACK_APP_SECRET,
-    incoming_webhook: {
-      url: process.env.WEBHOOK_URL
-    }
-  });
 
   bot.botkit.storage.channels.all(async (err, channels) => {
     if (err) {
@@ -58,15 +50,16 @@ function runReminders(controller) {
              + 'To submit your standup, DM me! Or, add any emoji to this message and I\'ll DM you to get your standup info.',
           attachments: [],
           channel: channel.id,
+          as_user: true
         };
-        bot.sendWebhook(reminder, (err, response) => {
+        bot.api.chat.postMessage(reminder, (err, response) => {
         	if (err) {
             log.error('Error sending reminder: ', err);
             return;
           }
         	log.verbose(`Sending channel reminder :D - ${channel.name}`);
           if (!err) {
-          	log.info(bot);
+          	log.info(response);
             bot.api.reactions.add({
               name: 'wave',
               channel: channel.id,
@@ -81,8 +74,8 @@ function runReminders(controller) {
   });
 }
 
-module.exports = function (controller) {
+module.exports = function (bot) {
   return function () {
-    runReminders(controller);
+    runReminders(bot);
   };
 };
