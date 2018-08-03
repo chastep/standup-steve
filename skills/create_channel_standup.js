@@ -8,7 +8,7 @@ const log = require('../logger')('custom:create_channel_standup:');
 const timeHelper = require('../helpers/time.js');
 
 function createNewStandup(channel, schedule) {
-  newStandup = {};
+  const newStandup = {};
   newStandup.id = `standup_${channel.id}`;
   // time attributes
   newStandup.time = timeHelper.getScheduleFormat(schedule.time);
@@ -20,8 +20,8 @@ function createChannelStandup(bot, message) {
   log.verbose(`Heard this request - ${message.match[0]}`);
 
   // store channel
-  bot.botkit.storage.channels.get(message.channel, (err, channel) => {
-    if (!channel) {
+  bot.botkit.storage.channels.get(message.channel, (err, chan) => {
+    if (!chan) {
       bot.reply(message, `I experienced an error finding this channel: ${err}`);
       log.error('channel is not present!');
     } else {
@@ -29,19 +29,19 @@ function createChannelStandup(bot, message) {
       // establish standup time from message
       const schedule = timeHelper.getTimeFromString(message.match[2]);
       if (schedule !== false) {
-        console.log(schedule);
+        log.info(schedule);
         // new standup object
-        channel.standup = createNewStandup(channel, schedule);
+        chan.standup = createNewStandup(chan, schedule);
         // update channel with new standup object
-        bot.botkit.storage.channels.save(channel, (err, channel) => {
-          if (err) {
-            bot.reply(message, `I experienced an error updating this channel: ${err}`);
-            log.error(err);
+        bot.botkit.storage.channels.save(chan, (error, channel) => {
+          if (error) {
+            bot.reply(message, `I experienced an error updating this channel: ${error}`);
+            log.error(error);
           } else {
             bot.reply(message, `Got it. Standup scheduled for ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)} :thumbsup:`);
             log.info(`Standup scheduled for ${message.channel} at ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)}`);
             log.info('channel has been successfully updated');
-	      		log.info(channel);
+            log.info(channel);
           }
         });
       } else {
