@@ -36,6 +36,9 @@ function runReports(controller) {
   const bot = controller.spawn({
     clientId: process.env.SLACK_APP_ID,
     clientSecret: process.env.SLACK_APP_SECRET,
+    incoming_webhook: {
+      url: process.env.WEBHOOK_URL
+    }
   });
 
   bot.botkit.storage.channels.all(async (err, channels) => {

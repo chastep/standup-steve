@@ -35,6 +35,9 @@ function runReminders(controller) {
   const bot = controller.spawn({
     clientId: process.env.SLACK_APP_ID,
     clientSecret: process.env.SLACK_APP_SECRET,
+    incoming_webhook: {
+      url: process.env.WEBHOOK_URL
+    }
   });
 
   bot.botkit.storage.channels.all(async (err, channels) => {
@@ -56,7 +59,7 @@ function runReminders(controller) {
           attachments: [],
           channel: channel.id,
         };
-        bot.say(reminder, (err, response) => {
+        bot.sendWebhook(reminder, (err, response) => {
         	if (err) {
             log.error('Error sending reminder: ', err);
             return;
