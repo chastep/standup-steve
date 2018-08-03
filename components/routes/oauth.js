@@ -1,38 +1,37 @@
-var log = require('../../logger')('botkit:oauth');
+const log = require('../../logger')('botkit:oauth');
 
-module.exports = function(webserver, controller) {
-
-  var handler = {
-    login: function(req, res) {
+module.exports = function (webserver, controller) {
+  const handler = {
+    login(req, res) {
       res.redirect(controller.getAuthorizeURL());
     },
-    oauth: function(req, res) {
-      var code = req.query.code;
-      var state = req.query.state;
+    oauth(req, res) {
+      const code = req.query.code;
+      const state = req.query.state;
 
       // we need to use the Slack API, so spawn a generic bot with no token
-      var slackapi = controller.spawn({});
+      const slackapi = controller.spawn({});
 
-      var opts = {
+      const opts = {
         client_id: controller.config.clientId,
         client_secret: controller.config.clientSecret,
-        code: code
+        code,
       };
 
-      slackapi.api.oauth.access(opts, function(err, auth) {
+      slackapi.api.oauth.access(opts, (err, auth) => {
         if (err) {
-          log.error('Confirming oauth: ' + err);
+          log.error(`Confirming oauth: ${err}`);
           return res.redirect('/login_error.html');
         }
         // what scopes did we get approved for?
-        var scopes = auth.scope.split(/\,/);
+        const scopes = auth.scope.split(/\,/);
 
         // use the token we got from the oauth
         // to call auth.test to make sure the token is valid
         // but also so that we reliably have the team_id field!
-        slackapi.api.auth.test({token: auth.access_token}, function(err, identity) {
+        slackapi.api.auth.test({ token: auth.access_token }, (err, identity) => {
           if (err) {
-            log.error('Fetching user identity: ' + err);
+            log.error(`Fetching user identity: ${err}`);
             return res.redirect('/login_error.html');
           }
 
@@ -53,8 +52,8 @@ module.exports = function(webserver, controller) {
           res.redirect('/login_success.html');
         });
       });
-    }
-  }
+    },
+  };
 
   // Create a /login link
   // This link will send user's off to Slack to authorize the app
@@ -70,4 +69,4 @@ module.exports = function(webserver, controller) {
   webserver.get('/oauth', handler.oauth);
 
   return handler;
-}
+};

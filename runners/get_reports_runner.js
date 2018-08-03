@@ -1,20 +1,20 @@
-// 
+//
 // this process kicks off the reporting process for all channels
-// 
+//
 
-var log = require('../logger')('custom:report_runner:');
-var _ = require('lodash');
-var timeHelper = require('../helpers/time.js');
-var channelReportHelper = require('../helpers/do_channel_report.js');
-var fedHolidays = require('@18f/us-federal-holidays');
+const log = require('../logger')('custom:report_runner:');
+const _ = require('lodash');
+const timeHelper = require('../helpers/time.js');
+const channelReportHelper = require('../helpers/do_channel_report.js');
+const fedHolidays = require('@18f/us-federal-holidays');
 
 function collectTimeMatchedChannels(channels, where) {
-  var selected = []
-  _.each(channels, function(channel) {
+  const selected = [];
+  _.each(channels, (channel) => {
     if (_.isEmpty(channel.standup)) {
-      return;
+
     } else if (channel.standup.time === where.time && _.includes(channel.standup.days, where.day)) {
-      selected.push(channel)
+      selected.push(channel);
     }
   });
   return selected;
@@ -24,28 +24,28 @@ function runReports(bot) {
   log.verbose('Attempting to run channel standup reports :D');
 
   // Don't run if today is a federal holiday
-  if(fedHolidays.isAHoliday()) {
+  if (fedHolidays.isAHoliday()) {
     return;
   }
 
-  var where = {
+  const where = {
     time: timeHelper.getScheduleFormat(),
-    day: timeHelper.getScheduleDay()
+    day: timeHelper.getScheduleDay(),
   };
 
-  bot.botkit.storage.channels.all(async function(err, channels) {
+  bot.botkit.storage.channels.all(async (err, channels) => {
     if (err) {
       log.error('Encountered error trying to get all channels: ', err);
       return;
     }
 
-    var selected_channels = await collectTimeMatchedChannels(channels, where);
+    const selected_channels = await collectTimeMatchedChannels(channels, where);
 
-    if(selected_channels.length > 0) {
-      log.info('Reporting standups for ' + channels.length + ' channel(s)');
+    if (selected_channels.length > 0) {
+      log.info(`Reporting standups for ${channels.length} channel(s)`);
 
       // Iterate over the channels
-      _.each(selected_channels, function(channel) {
+      _.each(selected_channels, (channel) => {
         console.log(channel);
         // channelReportHelper.doChannelReport(bot, channel, false);
       });
@@ -55,8 +55,8 @@ function runReports(bot) {
   });
 }
 
-module.exports = function(bot) {
-  return function() {
+module.exports = function (bot) {
+  return function () {
     runReports(bot);
   };
 };

@@ -1,54 +1,50 @@
-var request = require('request');
-var log = require('../../logger')('botkit:register_with_studio');
+const request = require('request');
+const log = require('../../logger')('botkit:register_with_studio');
 
-module.exports = function(webserver, controller) {
+module.exports = function (webserver, controller) {
+  let registered_this_session = false;
 
-  var registered_this_session = false;
-
-  controller.registerDeployWithStudio = function(host) {
+  controller.registerDeployWithStudio = function (host) {
     if (!registered_this_session && controller.config.studio_token) {
-
       // information about this instance of Botkit
       // send to Botkit Studio in order to display in the hosting tab
-      var instance = {
+      const instance = {
         url: host,
         version: controller.version(),
         ts: new Date(),
-      }
+      };
 
       request({
         method: 'post',
-        uri: (controller.config.studio_command_uri || 'https://studio.botkit.ai') + '/api/v1/bots/phonehome?access_token=' + controller.config.studio_token,
+        uri: `${controller.config.studio_command_uri || 'https://studio.botkit.ai'}/api/v1/bots/phonehome?access_token=${controller.config.studio_token}`,
         form: instance,
-      },function(err, res, body) {
-
+      }, (err, res, body) => {
         registered_this_session = true;
 
         if (err) {
-            log.error('Registering instance with Botkit Studio: ' + err);
+          log.error(`Registering instance with Botkit Studio: ${err}`);
         } else {
-          var json =null;
+          let json = null;
           try {
             json = JSON.parse(body);
-          } catch(err) {
-            log.error('Registering instance with Botkit Studio: ' + err);
+          } catch (err) {
+            log.error(`Registering instance with Botkit Studio: ${err}`);
           }
 
           if (json) {
             if (json.error) {
-              log.error('Registering instance with Botkit Studio: ' + json.error);
+              log.error(`Registering instance with Botkit Studio: ${json.error}`);
             }
           }
         }
       });
     }
-  }
+  };
 
   if (webserver && controller.config.studio_token) {
-    webserver.use(function(req, res, next) {
+    webserver.use((req, res, next) => {
       controller.registerDeployWithStudio(req.get('host'));
       next();
     });
   }
-
-}
+};
