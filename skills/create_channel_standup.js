@@ -12,6 +12,7 @@ function createNewStandup(channel, schedule) {
   newStandup.id = `standup_${channel.id}`;
   // time attributes
   newStandup.time = timeHelper.getScheduleFormat(schedule.time);
+  newStandup.reminderTime = timeHelper.getReminderFormat(newStandup.time, channel.reminderMinutes);
   newStandup.days = schedule.days;
   return newStandup;
 }
