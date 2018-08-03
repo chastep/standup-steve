@@ -15,11 +15,10 @@ function getStandupInfo(bot, message) {
       log.error('channel is not present!');
     } else {
       log.info('channel is present');
-      console.log(channel);
       if (_.isEmpty(channel.standup)) {
         bot.reply(message, 'There\'s no standup scheduled yet.');
       } else {
-        bot.reply(message, `There's a standup scheduled for ${timeHelper.getDisplayFormat(standup.time)} on ${timeHelper.getDisplayFormatForDays(standup.days)}`);
+        bot.reply(message, `There's a standup scheduled for ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)}`);
       }
     }
   });
