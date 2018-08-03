@@ -19,7 +19,7 @@ function collectTimeMatchedChannels(channels, where) {
   return selected;
 }
 
-function runReminders(bot) {
+function runReminders(controller) {
   log.verbose('Attempting to run channel reminders :D');
 
   // Don't run if today is a federal holiday
@@ -31,6 +31,11 @@ function runReminders(bot) {
     time: timeHelper.getScheduleFormat(),
     day: _.upperFirst(timeHelper.getScheduleDay()),
   };
+
+  const bot = controller.spawn({
+    clientId: process.env.SLACK_APP_ID,
+    clientSecret: process.env.SLACK_APP_SECRET,
+  });
 
   bot.botkit.storage.channels.all(async (err, channels) => {
     if (err) {
@@ -73,8 +78,8 @@ function runReminders(bot) {
   });
 }
 
-module.exports = function (bot) {
+module.exports = function (controller) {
   return function () {
-    runReminders(bot);
+    runReminders(controller);
   };
 };

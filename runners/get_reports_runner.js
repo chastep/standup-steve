@@ -20,7 +20,7 @@ function collectTimeMatchedChannels(channels, where) {
   return selected;
 }
 
-function runReports(bot) {
+function runReports(controller) {
   log.verbose('Attempting to run channel standup reports :D');
 
   // Don't run if today is a federal holiday
@@ -32,6 +32,11 @@ function runReports(bot) {
     time: timeHelper.getScheduleFormat(),
     day: timeHelper.getScheduleDay(),
   };
+
+  const bot = controller.spawn({
+    clientId: process.env.SLACK_APP_ID,
+    clientSecret: process.env.SLACK_APP_SECRET,
+  });
 
   bot.botkit.storage.channels.all(async (err, channels) => {
     if (err) {
@@ -55,8 +60,8 @@ function runReports(bot) {
   });
 }
 
-module.exports = function (bot) {
+module.exports = function (controller) {
   return function () {
-    runReports(bot);
+    runReports(controller);
   };
 };
