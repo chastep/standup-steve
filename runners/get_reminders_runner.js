@@ -12,7 +12,7 @@ function collectTimeMatchedChannels(channels, where) {
   _.each(channels, (channel) => {
     if (_.isEmpty(channel.standup)) {
 
-    } else if (((parseInt(channel.standup.time) - channel.reminderMinutes) === parseInt(where.time)) && _.includes(channel.standup.days, where.day)) {
+    } else if (channel.standup.reminderTime === where.time && _.includes(channel.standup.days, where.day)) {
       selected.push(channel);
     }
   });
