@@ -12,7 +12,7 @@ function collectTimeMatchedChannels(channels, where) {
   const selected = [];
   _.each(channels, (channel) => {
     if (_.isEmpty(channel.standup)) {
-
+      return;
     } else if (channel.standup.reminderTime === where.time && _.includes(channel.standup.days, where.day)) {
       selected.push(channel);
     }
