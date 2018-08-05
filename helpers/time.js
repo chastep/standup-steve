@@ -11,6 +11,10 @@ function getTimeFromString(str) {
                         { regex: 'th(ursday)?', day: 'Thursday' },
                         { regex: 'f(r|riday)?', day: 'Friday' }
                       ]
+  var weekendDays = [
+                      { regex: 'sa(t|urday)?', day: 'Saturday' },
+                      { regex: 'su(n|day)?', day: 'Sunday' }
+                    ]
 
   if(time) {
     // Assume incoming strings are in the standard timezone
@@ -23,15 +27,21 @@ function getTimeFromString(str) {
 
     if(time.isValid()) {
       var gotOneDay = false;
-      daysOfTheWeek.forEach(function(weekday) {
-        if((new RegExp(`(^|\\s)${weekday.regex}($|\\s)`, 'i')).test(daysPortion)) {
-          output.days.push(weekday.day);
+
+      var days = [];
+      process.env.WEEKEND_DEV ? days = weekendDays : days = daysOfTheWeek;
+
+      days.forEach(function(d) {
+        if((new RegExp(`(^|\\s)${d.regex}($|\\s)`, 'i')).test(daysPortion)) {
+          output.days.push(d.day);
           gotOneDay = true;
         }
       });
 
-      if(!gotOneDay) {
+      if(!gotOneDay && !process.env.WEEKEND_DEV) {
         output.days = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ];
+      } else if (!gotOneDay && process.env.WEEKEND_DEV) {
+        output.days = [ 'Saturday', 'Sunday' ];
       }
 
       return output;
@@ -82,7 +92,11 @@ function getDisplayFormat(time) {
 
 function getDisplayFormatForDaysOfChannel(days) {
   const days = []
-  const dow = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  if (process.env.WEEKEND_DEV) {
+    const dow = ['Saturday','Sunday'];
+  } else {
+    const dow = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  }
   dow.forEach(function (day) {
     if (channel.get(day.toLowerCase())) {
       days.push(day);
@@ -94,6 +108,8 @@ function getDisplayFormatForDaysOfChannel(days) {
 function getDisplayFormatForDays(days) {
   if(days.length === 5) {
     return 'all weekdays';
+  } else if (process.env.WEEKEND_DEV && days.length === 2) {
+    return 'both weekend days'
   } else if (days.length <= 1) {
     return days[0] || 'no days';
   }
