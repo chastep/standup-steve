@@ -3,7 +3,7 @@
 //
 
 const log = require('../logger')('custom:emoji_response:');
-// var interviewHelper = require('../helpers/do_interview.js');
+var interviewHelper = require('../helpers/do_interview.js');
 
 function startDmEmojiInterview(bot, message) {
   log.verbose(`Got an emoji reaction: ${message.reaction} from ${message.user}`);

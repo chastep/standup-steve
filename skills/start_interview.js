@@ -12,7 +12,8 @@ function startUserInterview(bot, message) {
 
 function attachListener(controller) {
   controller.hears([/\binterview\b/i], ['direct_mention'], (bot, message) => {
-    startUserInterview(bot, message);
+  	bot.reply(message, "This functionality is not currently activated! :D Please try again later")
+    // startUserInterview(bot, message);
   });
 }
 
