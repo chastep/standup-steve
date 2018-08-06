@@ -5,43 +5,43 @@
 function getStandupReport(standup) {
   const color = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
   const fields = [];
-  if (standup.yesterday) {
+  if (standup.answers.yesterday) {
     fields.push({
       title: 'Yesterday',
-      value: standup.yesterday,
+      value: standup.answers.yesterday,
       short: false,
     });
   }
-  if (standup.today) {
+  if (standup.answers.today) {
     fields.push({
       title: 'Today',
-      value: standup.today,
+      value: standup.answers.today,
       short: false,
     });
   }
-  if (standup.blockers) {
+  if (standup.answers.blockers) {
     fields.push({
       title: 'Blockers',
-      value: standup.blockers,
+      value: standup.answers.blockers,
       short: false,
     });
   }
-  if (standup.goal) {
+  if (standup.answers.wfh) {
     fields.push({
-      title: 'Goal',
-      value: standup.goal,
+      title: 'WFH',
+      value: standup.answers.goal,
       short: false,
     });
   }
 
   return {
-    title: standup.userRealName,
+    title: standup.userInfo.userRealName,
     fields,
     color,
-    thumb_url: standup.thumbUrl,
+    thumb_url: standup.userInfo.thumbUrl,
   };
 }
 
 module.exports = {
-  standupReport: getStandupReport,
+  getStandupReport: getStandupReport,
 };

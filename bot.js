@@ -105,7 +105,7 @@ if (process.env.SLACK_TOKEN) {
   var controller = Botkit.slackbot({
     debug: false,
     logger: { log: bkLog },
-    storage: require('botkit-storage-mongo')({ mongoUri: process.env.MONGODB_URL, tables: ['standups', tables: ['standups']}),
+    storage: require('botkit-storage-mongo')({ mongoUri: process.env.MONGODB_URL, tables: ['standups']}),
   });
 
   var webserver = require(`${__dirname}/components/express_webserver.js`)(controller);

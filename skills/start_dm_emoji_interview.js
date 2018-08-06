@@ -3,12 +3,12 @@
 //
 
 const log = require('../logger')('custom:emoji_response:');
-var interviewHelper = require('../helpers/do_interview.js');
+var interviewHelper = require('../helpers/standups/do_interview.js');
 
 function startDmEmojiInterview(bot, message) {
   log.verbose(`Got an emoji reaction: ${message.reaction} from ${message.user}`);
 
-  bot.botkit.storage.channels.get(message.channel, (err, channel) => {
+  bot.botkit.storage.channels.get(message.item.channel, (err, channel) => {
   	if (!channel) {
       log.error('channel is not present!');
     } else {
@@ -26,6 +26,7 @@ function attachStartDmEmojiInterviewListener(controller) {
 	    }
   	});
   });
+  log.verbose('ATTACHED');
 }
 
 module.exports = attachStartDmEmojiInterviewListener;

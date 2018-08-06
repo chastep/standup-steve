@@ -19,6 +19,7 @@ function getStandupInfo(bot, message) {
         bot.reply(message, 'There\'s no standup scheduled yet.');
       } else {
         bot.reply(message, `There's a standup scheduled for ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)}`);
+        log.info(channel.standup);
       }
     }
   });
