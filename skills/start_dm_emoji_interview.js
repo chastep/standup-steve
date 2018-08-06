@@ -10,20 +10,17 @@ function startDmEmojiInterview(bot, message) {
 
   bot.botkit.storage.channels.get(message.channel, (err, channel) => {
   	if (!channel) {
-      bot.reply(message, `I experienced an error finding this channel: ${err}`);
       log.error('channel is not present!');
     } else {
       log.info('channel is present');
-      log.info(channel);
-      log.info(message);
-      // interviewHelper(bot, channel, message.user);
+      interviewHelper(bot, message.item.channel, message.user);
     }
   });
 }
 
 function attachStartDmEmojiInterviewListener(controller) {
   controller.on('reaction_added', (bot, message) => {
-  	bot.indentifyBot((err, i) => {
+  	bot.identifyBot((err, i) => {
   		if (message.item_user === i.id && message.user !== i.id) {
 	      startDmEmojiInterview(bot, message);
 	    }
