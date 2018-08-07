@@ -3,7 +3,7 @@
 //
 
 const _ = require('lodash');
-const standupReport = require('../get_standup_report.js');
+const standupReport = require('../standups/get_standup_report.js');
 
 function createAttachments(standups) {
   const attachments = [];

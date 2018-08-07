@@ -105,7 +105,7 @@ if (process.env.SLACK_TOKEN) {
   var controller = Botkit.slackbot({
     debug: false,
     logger: { log: bkLog },
-    storage: require('botkit-storage-mongo')({ mongoUri: process.env.MONGODB_URL }),
+    storage: require('botkit-storage-mongo')({ mongoUri: process.env.MONGODB_URL, tables: ['standups']}),
   });
 
   var webserver = require(`${__dirname}/components/express_webserver.js`)(controller);
@@ -158,7 +158,7 @@ if (process.env.SLACK_TOKEN) {
   // Use a mongo database if specified, otherwise store in a JSON file local to the app.
   // Mongo is automatically configured when deploying to Heroku
   if (process.env.MONGOLAB_NAVY_URI) {
-    const mongoStorage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGOLAB_NAVY_URI });
+    const mongoStorage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGOLAB_NAVY_URI, tables: ['standups']});
     bot_options.storage = mongoStorage;
   } else {
     bot_options.json_file_store = `${__dirname}/.data/db/`; // store user data in a simple JSON format

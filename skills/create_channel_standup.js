@@ -36,7 +36,7 @@ function createChannelStandup(bot, message) {
         // update channel with new standup object
         bot.botkit.storage.channels.save(chan, (error, channel) => {
           if (error) {
-            bot.reply(message, `I experienced an error updating this channel: ${error}`);
+            bot.reply(message, `I experienced an error updating this channels standup: ${error}`);
             log.error(error);
           } else {
             bot.reply(message, `Got it. Standup scheduled for ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)} :thumbsup:`);

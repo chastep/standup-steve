@@ -59,7 +59,6 @@ function runReminders(bot) {
           }
         	log.verbose(`Sending channel reminder :D - ${channel.name}`);
           if (!err) {
-          	log.info(response);
             bot.api.reactions.add({
               name: 'wave',
               channel: channel.id,
