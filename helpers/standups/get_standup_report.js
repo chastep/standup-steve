@@ -2,7 +2,7 @@
 // compiles a report for a individual standup
 //
 
-function getStandupReport(standup) {
+module.exports = function getStandupReport(standup) {
   const color = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
   const fields = [];
   if (standup.answers.yesterday) {
@@ -29,7 +29,7 @@ function getStandupReport(standup) {
   if (standup.answers.wfh) {
     fields.push({
       title: 'WFH',
-      value: standup.answers.goal,
+      value: standup.answers.wfh,
       short: false,
     });
   }
@@ -41,7 +41,3 @@ function getStandupReport(standup) {
     thumb_url: standup.userInfo.thumbUrl,
   };
 }
-
-module.exports = {
-  getStandupReport: getStandupReport,
-};

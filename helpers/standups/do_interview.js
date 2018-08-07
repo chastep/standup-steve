@@ -153,7 +153,6 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 						      } else {
 						      	log.info(newStand);
 						        log.verbose('Standup info recorded for ' + newStand.userInfo.realName);
-						        log.info(getStandupReport(newStand));
                     bot.say({
                       text: 'Thanks! Your standup for '+interviewChannel.name+' is recorded. It will look like:',
                       attachments: [ getStandupReport(newStand) ],
