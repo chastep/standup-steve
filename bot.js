@@ -145,8 +145,9 @@ if (process.env.SLACK_TOKEN) {
 } else {
   // botkit options, configurable
   const bot_options = {
-    clientId: process.env.SLACK_APP_ID,
-    clientSecret: process.env.SLACK_APP_SECRET,
+    // clientId: process.env.SLACK_APP_ID,
+    // clientSecret: process.env.SLACK_APP_SECRET,
+    token: process.env.SLACK_PROD_TOKEN,
     debug: false,
     logger: { log: bkLog },
     scopes: ['bot'],
