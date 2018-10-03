@@ -57,12 +57,13 @@ const schedule = require('node-schedule');
 require('dotenv').config();
 
 // checkout dem kewl env vars
-if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET || !process.env.PORT) {
-  usage_tip();
-  process.exit(1);
-}
+// need to up to reflect new startup sequence
+// if (!process.env.SLACK_APP_ID || !process.env.SLACK_APP_SECRET || !process.env.PORT) {
+//   usage_tip();
+//   process.exit(1);
+// }
 
-// kick up a new Botkit and debug protocal
+// kick up a new Botkit and debug protocol
 const Botkit = require('botkit');
 const debug = require('debug')('botkit:main');
 const log = require('./logger')('app');
@@ -100,7 +101,7 @@ function bkLog(level) {
   fn.apply(thisObj, args);
 }
 
-// local dev test
+// local development
 if (process.env.SLACK_TOKEN) {
   var controller = Botkit.slackbot({
     debug: false,
