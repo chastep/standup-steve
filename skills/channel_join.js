@@ -24,7 +24,7 @@ function joinChannel(bot, message) {
   // store channel
   bot.botkit.storage.channels.get(message.channel, async (err, channel) => {
     if (!channel) {
-      log.error('channel does not exist');
+      log.warn('channel does not exist');
 
       var channel = {};
       channel.id = message.channel;
@@ -34,7 +34,7 @@ function joinChannel(bot, message) {
 
       bot.botkit.storage.channels.save(channel, (err, channel) => {
 	 			if (err) {
-	        bot.reply(message, `I experienced an error adding the channel: ${err}`);
+	        bot.reply(message, `I experienced an error joining the channel: ${err}`);
 	        log.error(err);
 	      } else {
 	      	log.info('channel has been successfully saved');

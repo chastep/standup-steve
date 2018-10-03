@@ -112,8 +112,8 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 	      		// return standup to user in report form
 	      		// TODO: Provide them with chance to edit
 			    } else {
-			      log.verbose('Starting the interview for '+interviewUser);
-			      convo.say('Good Morning, Afternoon, or Evening! Let\'s record your standup for '+interviewChannel+'\n (Say "skip" to skip any of the questions or "exit" to stop the interview)');
+			      log.verbose('Starting the interview for '+interviewUser+' in '+interviewChannel);
+			      convo.say('Good Morning, Afternoon, or Evening! Let\'s record your standup for '+channel.name+'\n (Say "skip" to skip any of the questions or "exit" to stop the interview)');
 
 			      // check for exit function
 						function checkForExit(response, conversation) {
@@ -154,7 +154,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 						      	log.info(newStand);
 						        log.verbose('Standup info recorded for ' + newStand.userInfo.realName);
                     bot.say({
-                      text: 'Thanks! Your standup for '+interviewChannel.name+' is recorded. It will look like:',
+                      text: 'Thanks! Your standup for '+channel.name+' is recorded. It will look like:',
                       attachments: [ getStandupReport(newStand) ],
                       channel: interviewUser
                     });
