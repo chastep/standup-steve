@@ -5,7 +5,7 @@
 // 2. will send the user a private message/start private conversation
 // 3. will have set list of question and will iterate through them, posing them to the user
 // 4. will gather user responses after each question
-// 5. will create and standup
+// 5. will create standup
 // 6. will create standup report and provide to user when conversation is over
 //
 
@@ -13,9 +13,7 @@ const log = require('../../logger')('custom:do_interview:');
 const timeHelper = require('../time.js');
 const _ = require('lodash');
 const getStandupReport = require('./get_standup_report.js');
-
-// should be noted that this current functionality will assume that we have ONE global channel
-// would want to setup a queuing functionality in the future if we have multiple channels with a mixed user base
+const updateInterview = require('./update_interview.js')
 
 // find all standups for user
 function collectUserStandups(standups, interviewUser) {
@@ -71,7 +69,6 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 
       	if (standups) {
       		var userStandups = await collectUserStandups(standups, interviewUser);
-          log.verbose(userStandups);
       	} else {
       		var userStandups = [];
       		log.warn('There are no standups saved in the db');
@@ -104,21 +101,61 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
               name: 'wfh'
             }
           ];
-		      // check to see if a standup has already been recorded for the day
-		      // if yes then return that standup
-	      	if (userStandups.length && timeHelper.datesAreSameDay(userStandups[userStandups.length - 1].date, new Date())) {
-	      		log.verbose(interviewUser+' already completed a standup for '+channel.name+' today')
+          // first check to see if standup has already been reported
+		      // then check to see if a standup has already been recorded for the day
+          if (parseFloat(timeHelper.getScheduleFormat()) >= parseFloat(channel.standup.time)) {
+            log.verbose(channel.name+' already reported a standup today');
             convo.say(
-              'Look\'s like you already recorded a standup for '+channel.name+
-              '\n Good Job! :thumbsup:'+
-              '\n Functionality to edit past standups is currently under construction :construction_worker: Sit tight!'
+              'Look\'s like channel '+channel.name+' already reported a standup today :/'
             );
-	      		// return standup to user in report form
-	      		// TODO: Provide them with option to edit existing standup
+          } else if (userStandups.length && timeHelper.datesAreSameDay(userStandups[userStandups.length - 1].date, new Date())) {
+	      		log.verbose(interviewUser+' already completed a standup for '+channel.name+' today');
+            convo.say(
+              'Look\'s like you already recorded a standup for '+channel.name+'. Good Job! :thumbsup:'
+            );
+            convo.ask(
+              'Would you like to update that response now? :thinking_face:\n'+
+              '(Respond \'yes\' to edit or \'no\' to exit)',
+              [
+                {
+                  pattern: bot.utterances.yes,
+                  callback: function(response, convo) {
+                    convo.gotoThread('update_thread');
+                    convo.say('Okay, let\'s get started! :simple_smile:');
+                    updateInterview(bot, interviewChannel, interviewUser);
+                  }
+                },
+                {
+                  pattern: bot.utterances.no,
+                  callback: function(response, convo) {
+                    convo.gotoThread('no_thread');
+                  }
+                },
+                {
+                  default: true,
+                  callback(response, convo) {
+                    convo.gotoThread('bad_response');
+                  },
+                }
+              ]
+            );
+            convo.addMessage({
+              action: 'stop',
+            }, 'update_thread');
+            convo.addMessage({
+              text: 'Bye! :wave:',
+              action: 'stop',
+            }, 'no_thread');
+            convo.addMessage({
+              text: 'Sorry I did not understand. Say `yes` or `no`',
+              action: 'default',
+            }, 'bad_response');
 			    } else {
 			      log.verbose('Starting the interview for '+interviewUser+' in '+interviewChannel);
-			      convo.say('Good Morning, Afternoon, or Evening! Let\'s record your standup for '+channel.name+'\n (Say "skip" to skip any of the questions or "exit" to stop the interview)');
-
+			      convo.say(
+              'Good Morning, Afternoon, or Evening! Let\'s record your standup for '+channel.name+
+              '\n(Say "skip" to skip any of the questions or "exit" to stop the interview)'
+            );
 			      // check for exit function
 						function checkForExit(response, conversation) {
 							if (response.text.match(/^exit$/i)) {
@@ -144,9 +181,9 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 
 						convo.on('end', async function(convo) {
 							if (convo.status=='completed' && !exited) {
-							  // do something useful with the users responses
-							  var res = convo.extractResponses();
-							  log.info(res);
+							  // do something useful with the users responses?
+							  // var res = convo.extractResponses();
+							  // log.info(res);
 
 							  var newStandup = await createNewStandup(answers, interviewChannel, interviewUser, bot);
 

@@ -47,7 +47,7 @@ function runReminders(bot) {
       _.each(selected_channels, (channel) => {
         const reminder = {
           text: `<!here> :hourglass: There's a standup in ${channel.reminderMinutes} minutes! `
-             + 'To submit your standup, DM me! Or, add any emoji to this message and I\'ll DM you to get your standup info.',
+             + 'To submit your standup add any emoji to this message and I\'ll DM you to get your standup info.',
           attachments: [],
           channel: channel.id,
           as_user: true

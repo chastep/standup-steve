@@ -8,7 +8,6 @@ const _ = require('lodash');
 const log = require('../logger')('custom:do_channel_report:');
 const timeHelper = require('./time.js');
 const createNewChannelReport = require('./create_new_channel_report.js');
-// const updateChannelReport = require('./updateChannelReport');
 
 function gatherTodaysStandups(standups) {
   const todaysStandups = [];
@@ -22,7 +21,7 @@ function gatherTodaysStandups(standups) {
   return todaysStandups;
 }
 
-function doChannelReport(bot, channel_id) {
+module.exports = function doChannelReport(bot, channel_id) {
   log.verbose(`Attempting to run standup report for ${channel_id}`);
 
   bot.botkit.storage.channels.get(channel_id, (err, channel) => {
@@ -46,7 +45,3 @@ function doChannelReport(bot, channel_id) {
     }
   });
 }
-
-module.exports = {
-  doChannelReport
-};
