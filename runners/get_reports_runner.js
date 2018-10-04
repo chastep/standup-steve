@@ -13,7 +13,7 @@ function collectTimeMatchedChannels(channels, where) {
   _.each(channels, (channel) => {
     if (_.isEmpty(channel.standup)) {
       return;
-    } else if (channel.standup.reminderTime === where.time && _.includes(channel.standup.days, where.day)) {
+    } else if (channel.standup.time === where.time && _.includes(channel.standup.days, _.capitalize(where.day))) {
       selected.push(channel);
     }
   });
@@ -23,14 +23,13 @@ function collectTimeMatchedChannels(channels, where) {
 function runReports(bot) {
   log.verbose('Attempting to run channel standup reports :D');
 
-  // Don't run if today is a federal holiday
   if (fedHolidays.isAHoliday()) {
     return;
-  }
+  };
 
   const where = {
     time: timeHelper.getScheduleFormat(),
-    day: timeHelper.getScheduleDay(),
+    day: timeHelper.getScheduleDay()
   };
 
   bot.botkit.storage.channels.all(async (err, channels) => {
@@ -43,11 +42,9 @@ function runReports(bot) {
 
     if (selected_channels.length > 0) {
       log.info(`Reporting standups for ${channels.length} channel(s)`);
-
-      // Iterate over the channels
       _.each(selected_channels, (channel) => {
-        console.log(channel);
-        // channelReportHelper.doChannelReport(bot, channel, false);
+        log.verbose('Starting to run channel report for '+channel.id);
+        channelReportHelper.doChannelReport(bot, channel.id);
       });
     } else {
       log.verbose('There are no channels eligible for reporting - PEACE');

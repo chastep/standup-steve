@@ -51,9 +51,7 @@ function joinChannel(bot, message) {
   });
 }
 
-function attachJoinChannelListener(controller) {
+module.exports = function attachJoinChannelListener(controller) {
   controller.on('bot_channel_join', joinChannel);
   log.verbose('ATTACHED');
-}
-
-module.exports = attachJoinChannelListener;
+};

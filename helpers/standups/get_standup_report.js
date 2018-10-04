@@ -2,6 +2,8 @@
 // compiles a report for a individual standup
 //
 
+const log = require('../../logger')('custom:get_standup_report:');
+
 module.exports = function getStandupReport(standup) {
   const color = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
   const fields = [];
@@ -35,7 +37,7 @@ module.exports = function getStandupReport(standup) {
   }
 
   return {
-    title: standup.userInfo.userRealName,
+    title: standup.userInfo.realName,
     fields,
     color,
     thumb_url: standup.userInfo.thumbUrl,

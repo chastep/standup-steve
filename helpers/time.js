@@ -124,6 +124,10 @@ function getCurrentDate () {
   return moment.tz(timezone).format('YYYY-MM-DD');
 }
 
+function getCurrentReportDate () {
+  return moment.tz(timezone).format('dddd, MMM Do YYYY, h:mm a z')
+}
+
 function getReminderFormat (time, minutes) {
   if (minutes === null) {
     return null;
@@ -148,6 +152,7 @@ module.exports = {
   getDisplayFormatForDaysOfChannel: getDisplayFormatForDaysOfChannel,
   getReportFormat: getReportFormat,
   getCurrentDate: getCurrentDate,
+  getCurrentReportDate: getCurrentReportDate,
   getReminderFormat: getReminderFormat,
   datesAreSameDay: datesAreSameDay
 };
