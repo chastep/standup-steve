@@ -4,29 +4,18 @@
 
 const log = require('../../logger')('custom:for_channel:');
 const convertStandups = require('./convert_standups.js');
-// const generateFields  = require('./generateFields');
+// const generateFields  = require('./generateFields'); => stat reporting, icebox feature
 
-function defaultMessage(channelName) {
-  return `Today's standup for <#${channelName}>`;
-}
+module.exports = function reportForChannel(channel, standups) {
+  const attachableStandups = convertStandups(standups);
 
-function gatherChannelStandupsAsAttachments(channel, standups) {
-  const channelName = channel.name;
-  const attachments = convertStandups(standups);
-
-  attachments.unshift({
-    fallback: defaultMessage(channelName),
-    pretext: defaultMessage(channelName),
-    title: 'Summary',
-    // fields:   generateFields(attachments)
+  attachableStandups.unshift({
+    title: 'Opternative Engineering Team'
+    // fields:   generateFields(attachableStandups)
   });
 
   return {
-    channel: channelName,
-    attachments,
+    channel: channel.name,
+    attachments: attachableStandups
   };
 }
-
-module.exports = {
-  gatherChannelStandupsAsAttachments,
-};

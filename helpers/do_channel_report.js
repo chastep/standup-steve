@@ -4,15 +4,28 @@
 //
 
 const async = require('async');
+const _ = require('lodash');
 const log = require('../logger')('custom:do_channel_report:');
 const timeHelper = require('./time.js');
 const createNewChannelReport = require('./create_new_channel_report.js');
 // const updateChannelReport = require('./updateChannelReport');
 
-function doChannelReport(bot, channel, update) {
-  log.verbose(`Attempting to run standup report for ${channel.name}`);
+function gatherTodaysStandups(standups) {
+  const todaysStandups = [];
 
-  bot.botkit.storage.channels.get(channel, (err, channel) => {
+  _.each(standups, (standup) => {
+    if (timeHelper.datesAreSameDay(standup.date, new Date())) {
+      todaysStandups.push(standup);
+    }
+  });
+
+  return todaysStandups;
+}
+
+function doChannelReport(bot, channel_id) {
+  log.verbose(`Attempting to run standup report for ${channel_id}`);
+
+  bot.botkit.storage.channels.get(channel_id, (err, channel) => {
     if (!channel) {
       log.error(`channel is not present: ${err}`);
     } else {
@@ -21,18 +34,11 @@ function doChannelReport(bot, channel, update) {
         if (err) {
           log.error('Encountered error trying to get all standups: ', err);
         }
-        // ~~~~~~~~~~~~~~
-        // logic here to find all standups (standup responses) for the associated channel
-        // ~~~~~~~~~~~~~~
+        const reportableStandups = gatherTodaysStandups(standups);
         async.series([
           function (callback) {
-            if (update) {
-              log.info('updating exiting channel standup report');
-              updateChannelReport(bot, channel, standups, userName);
-            } else {
-              log.info('creating channel standup report');
-              createNewChannelReport(bot, channel, standups);
-            }
+            log.info('creating channel standup report');
+            createNewChannelReport(bot, channel, reportableStandups);
             callback(null);
           }, function () {},
         ]);
@@ -42,5 +48,5 @@ function doChannelReport(bot, channel, update) {
 }
 
 module.exports = {
-  doChannelReport,
+  doChannelReport
 };

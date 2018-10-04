@@ -53,9 +53,7 @@ function createChannelStandup(bot, message) {
   });
 }
 
-function attachCreateChannelStandupListener(controller) {
+module.exports = function attachCreateChannelStandupListener(controller) {
   controller.hears(['(schedule|create|move) standup (.*)'], 'direct_mention', createChannelStandup);
   log.verbose('ATTACHED');
-}
-
-module.exports = attachCreateChannelStandupListener;
+};
