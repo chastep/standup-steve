@@ -5,7 +5,7 @@
 const log = require('../logger')('custom:report_runner:');
 const _ = require('lodash');
 const timeHelper = require('../helpers/time.js');
-const channelReportHelper = require('../helpers/do_channel_report.js');
+const doChannelReport = require('../helpers/do_channel_report.js');
 const fedHolidays = require('@18f/us-federal-holidays');
 
 function collectTimeMatchedChannels(channels, where) {
@@ -44,7 +44,7 @@ function runReports(bot) {
       log.info(`Reporting standups for ${channels.length} channel(s)`);
       _.each(selected_channels, (channel) => {
         log.verbose('Starting to run channel report for '+channel.id);
-        channelReportHelper.doChannelReport(bot, channel.id);
+        doChannelReport(bot, channel.id);
       });
     } else {
       log.verbose('There are no channels eligible for reporting - PEACE');

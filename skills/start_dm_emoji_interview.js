@@ -3,7 +3,7 @@
 //
 
 const log = require('../logger')('custom:emoji_response:');
-var interviewHelper = require('../helpers/standups/do_interview.js');
+var doInterview = require('../helpers/standups/do_interview.js');
 
 function startDmEmojiInterview(bot, message) {
   log.verbose(`Got an emoji reaction: ${message.reaction} from ${message.user}`);
@@ -13,7 +13,7 @@ function startDmEmojiInterview(bot, message) {
       log.error('channel is not present!');
     } else {
       log.info('channel is present');
-      interviewHelper(bot, message.item.channel, message.user);
+      doInterview(bot, message.item.channel, message.user);
     }
   });
 }
