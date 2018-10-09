@@ -64,7 +64,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
       log.info('channel is present');
       bot.botkit.storage.standups.all(async (err, standups) => {
       	if (err) {
-      		log.error('Problem finding all standups: ' + err);
+          log.error(`Problem finding all standups: ${err}`);
       	}
 
       	if (standups) {
@@ -111,17 +111,17 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
           } else if (userStandups.length && timeHelper.datesAreSameDay(userStandups[userStandups.length - 1].date, new Date())) {
 	      		log.verbose(interviewUser+' already completed a standup for '+channel.name+' today');
             convo.say(
-              'Look\'s like you already recorded a standup for '+channel.name+'. Good Job! :thumbsup:'
+              'Look\'s like you already recorded a standup for channel: '+channel.name+'. Good Job! :thumbsup:'
             );
             convo.ask(
-              'Would you like to update that response now? :thinking_face:\n'+
-              '(Respond \'yes\' to edit or \'no\' to exit)',
+              `Would you like to update that response now? :thinking_face:\n`+
+              `*(Respond 'yes' to edit or 'no' to exit)*`,
               [
                 {
                   pattern: bot.utterances.yes,
                   callback: function(response, convo) {
                     convo.gotoThread('update_thread');
-                    convo.say('Okay, let\'s get started! :simple_smile:');
+                    convo.say(`Okay, let's get started! :simple_smile:`);
                     updateInterview(bot, interviewChannel, interviewUser);
                   }
                 },
@@ -153,14 +153,15 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 			    } else {
 			      log.verbose('Starting the interview for '+interviewUser+' in '+interviewChannel);
 			      convo.say(
-              'Good Morning, Afternoon, or Evening! Let\'s record your standup for '+channel.name+
-              '\n(Say "skip" to skip any of the questions or "exit" to stop the interview)'
+              `Good Morning, Afternoon, or Evening! Let's record your standup for channel: ${channel.name}\n`
+              `*(Say "skip" to skip any of the questions)*\n`+
+              `*(Say "exit" to stop the update)*`
             );
 			      // check for exit function
 						function checkForExit(response, conversation) {
 							if (response.text.match(/^exit$/i)) {
 								conversation.messages.length = 0;
-								conversation.say('Okay! I won\'t record anything right now. :simple_smile:');
+								conversation.say(`Okay! I won't record anything right now. :simple_smile:`);
 						    conversation.next();
 						    exited = true;
 						    return true;
@@ -195,7 +196,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 						      	log.info(newStand);
 						        log.verbose('Standup info recorded for ' + newStand.userInfo.realName);
                     bot.say({
-                      text: 'Thanks! Your standup for '+channel.name+' is recorded. It will look like:',
+                      text: `Thanks! Your recorded standup for channel: ${channel.name} is below`,
                       attachments: [ getStandupReport(newStand) ],
                       channel: interviewUser
                     });

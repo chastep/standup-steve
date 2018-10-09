@@ -58,7 +58,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
       log.info('channel is present');
       bot.botkit.storage.standups.all(async (err, standups) => {
         if (err) {
-          log.error('Problem finding all standups: ' + err);
+          log.error(`Problem finding all standups: ${err}`);
         }
 
         var userStandupToUpdate = await collectLastUserStandup(standups, interviewUser);
@@ -97,8 +97,9 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
           
           log.verbose('Starting the update for '+interviewUser+' in '+interviewChannel);
           convo.say(
-            'Okay, let\'s get started! :simple_smile:\n'+
-            '(Say "skip" to skip any of the questions or "exit" to stop the update)'
+            `Okay, let's get started! :simple_smile:\n`+
+            `*(Say "skip" to skip any of the questions and keep previous answer)*\n`+
+            `*(Say "exit" to stop the update)*`
           );
           // check for exit function
           function checkForExit(response, conversation) {
@@ -113,11 +114,18 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
           }
 
           _.each(sections, (section) => {
-            convo.say('Your previous response: '+section.answer);
+            convo.say(
+              `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
+              `*Question* - ${section.question}\n`+
+              `*Previous Response* - ${section.answer}\n`+
+              `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+            );
             convo.ask(section.question, function(response, conversation) {
               if (!checkForExit(response, conversation)) {
                 if (!response.text.match(/^skip$/ig)) {
                   answers[section.name] = response.text;
+                } else {
+                  answers[section.name] = section.answer;
                 }
                 conversation.next();
               }
