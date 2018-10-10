@@ -1,6 +1,7 @@
-# Botkit Starter Kit for Slack Bots
+# Glossary
+* [Botkit Basics](#botkit_basics)
 
-This repo contains everything you need to get started building a Slack bot with [Botkit](https://botkit.ai) and [Botkit Studio](https://botkit.ai).
+## Botkit Basics
 
 Botkit is designed to ease the process of designing and running useful, creative bots that live inside messaging platforms. Bots are applications that can send and receive messages, and in many cases, appear alongside their human counterparts as users.
 
@@ -10,7 +11,7 @@ Our goal with Botkit is to make bot building easy, fun, and accessible to anyone
 
 If you are looking to create a bot on other platforms using Glitch, check out the [Botkit project page](https://glitch.com/botkit).
 
-### What's Included
+#### What's Included
 * [Botkit core](https://github.com/howdyai/botkit/blob/master/docs/readme.md#developing-with-botkit) - a complete programming system for building conversational software
 * [Botkit Studio API](https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#function-index) - additional APIs that extend Botkit with powerful tools and APIs
 * [Pre-configured Express.js webserver](https://expressjs.com/) including:
@@ -46,11 +47,11 @@ Next, get a Botkit Studio token [from your Botkit developer account](https://stu
  
  Now comes the fun part of [making your bot!](https://github.com/howdyai/botkit/blob/master/docs/readme.md#basic-usage)
 
-# Developer & Support Community
+### Developer & Support Community
 
 You can find full documentation for Botkit on our [GitHub page](https://github.com/howdyai/botkit/blob/master/readme.md). Botkit Studio users can access the [Botkit Studio Knowledge Base](https://botkit.groovehq.com/help_center) for help in managing their account.
 
-###  Need more help?
+####  Need more help?
 * Glitch allows users to ask the community for help directly from the editor! For more information on raising your hand, [read this blog post.](https://medium.com/glitch/just-raise-your-hand-how-glitch-helps-aa6564cb1685)
 
 * Join our thriving community of Botkit developers and bot enthusiasts at large. Over 4500 members strong, [our open Slack group](http://community.botkit.ai) is _the place_ for people interested in the art and science of making bots. 
@@ -61,8 +62,6 @@ You can find full documentation for Botkit on our [GitHub page](https://github.c
  
  [Full video of our 2016 event is available on Youtube.](https://www.youtube.com/playlist?list=PLD3JNfKLDs7WsEHSal2cfwG0Fex7A6aok)
 
-
-
-# About Botkit
+### About Botkit
 
 Botkit is a product of [Howdy](https://howdy.ai) and made in Austin, TX with the help of a worldwide community of botheads.

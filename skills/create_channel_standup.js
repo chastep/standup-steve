@@ -4,7 +4,7 @@
 // 2. saves it in storage (with relevant attributes)
 //
 
-const log = require('../logger')('custom:create_channel_standup:');
+const log = require('../logger')('custom:create_channel_standup');
 const timeHelper = require('../helpers/time.js');
 
 function createNewStandup(channel, schedule) {
