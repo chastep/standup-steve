@@ -2,7 +2,7 @@
 
 ## Development Basics
 
-_Please note that these are just some of the required packages needed for Steve to work. Please refer to the `package.json` for more details:
+_Please note that these are just some of the required packages needed for Steve to work. Please refer to the `package.json` for more details_:
 * [Node](https://nodejs.org/en/) - v10.3.0
 * [npm](https://www.npmjs.com/) - 6.3.0
 * [Botkit](https://github.com/howdyai/botkit) - ^0.6.16
@@ -52,5 +52,5 @@ Decided to use MongoDB to mix it up a bit honestly. Botkit also had a nifty [Mon
 
 ### Heroku Deployment
 * [Heroku Node Project Deployment](https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app)
-* I highly recomend using [mLab](https://www.mlab.com/) in tandum with Heroku, makes for easy visualation of data.
+* I highly recomend using [mLab](https://www.mlab.com/) in tandum with Heroku, makes for easy visualization of data.
 

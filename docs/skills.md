@@ -8,7 +8,7 @@ To create a new standup or reschedule one, first ensure that the bot is in the c
 
 Additionally, you can schedule the standups for just certain days of the week:
 
-`@standup-bot schedule standup for 10am M W F`
+`@Standup Steve schedule standup for 10am M W F`
 
 Some things to note:
 
@@ -27,7 +27,7 @@ Some things to note:
 
 Once a standup is scheduled in a channel, you can have it notify the channel some time before the report to remind folks to submit their standups.  To do that, in the channel, say:
 
-`@standup-bot reminder 10`
+`@Standup Steve reminder 10`
 
 This will schedule a reminder for 10 minutes prior to the report.
 
@@ -39,7 +39,7 @@ This will schedule a reminder for 10 minutes prior to the report.
 
 To remove a standup and stop reporting on it, in the channel, say:
 
-`@standup-bot remove standup`
+`@Standup Steve remove standup`
 
 - There is no confirmation, so be sure!
 - User standups that have already been recorded will not be deleted
@@ -47,7 +47,7 @@ To remove a standup and stop reporting on it, in the channel, say:
 
 ## Interacting with the bot
 
-Many interactions with the bot are triggered by mentioning the bot by name (i.e. `@Standup Steve`). Sometimes mentioning the bot in tje channel is simplistic since you don't have to tell the bot what channel you're talking about.
+Many interactions with the bot are triggered by mentioning the bot by name (i.e. `@Standup Steve`). Sometimes mentioning the bot in the channel is simplistic since you don't have to tell the bot what channel you're talking about.
 
 ## Standup info
 
