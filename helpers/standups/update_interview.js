@@ -25,23 +25,8 @@ function collectLastUserStandup(standups, interviewUser) {
   return selected[selected.length -1];
 };
 
-// find user information
-function collectUserInfo(bot, interviewUser) {
-  return new Promise((res, rej) => {
-    bot.api.users.info({ user: interviewUser }, (err, response) => {
-      if (err) {
-        return rej(err);
-      }
-      return res({
-        realName: response.user.realName || response.user.name,
-        thumbUrl: response.user.profile.image_72
-      });
-    });
-  });
-};
-
 // create new standup object
-async function updateStandup(answers, standupToUpdate) {
+function updateStandup(answers, standupToUpdate) {
   var standup = standupToUpdate;
   standup.answers = answers;
   return standup;

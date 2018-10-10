@@ -14,6 +14,7 @@ const timeHelper = require('../time.js');
 const _ = require('lodash');
 const getStandupReport = require('./get_standup_report.js');
 const updateInterview = require('./update_interview.js')
+const common = require('../common.js');
 
 // find all standups for user
 function collectUserStandups(standups, interviewUser) {
@@ -26,21 +27,6 @@ function collectUserStandups(standups, interviewUser) {
 	return selected;
 };
 
-// find user information
-function collectUserInfo(bot, interviewUser) {
-  return new Promise((res, rej) => {
-    bot.api.users.info({ user: interviewUser }, (err, response) => {
-      if (err) {
-        return rej(err);
-      }
-      return res({
-      	realName: response.user.real_name || response.user.name,
-      	thumbUrl: response.user.profile.image_72
-      });
-    });
-  });
-};
-
 // create new standup object
 async function createNewStandup(answers, interviewChannel, interviewUser, bot) {
 	var standup = {};
@@ -48,13 +34,13 @@ async function createNewStandup(answers, interviewChannel, interviewUser, bot) {
 	standup.channel = interviewChannel;
 	standup.date = timeHelper.getReportFormat();
 	standup.user = interviewUser;
-	standup.userInfo = await collectUserInfo(bot, interviewUser);
+	standup.userInfo = await common.collectUserInfo(bot, interviewUser);
   standup.answers = answers;
   return standup;
 }
 
 module.exports = function doInterview(bot, interviewChannel, interviewUser) {
-	log.verbose('Preparing for an interview with '+interviewUser+' for channel ' + interviewChannel);
+	log.verbose(`Preparing for an interview with ${interviewUser} for channel ${interviewChannel}`);
 
 	// find channel
 	bot.botkit.storage.channels.get(interviewChannel, (err, channel) => { 
@@ -153,9 +139,9 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 			    } else {
 			      log.verbose('Starting the interview for '+interviewUser+' in '+interviewChannel);
 			      convo.say(
-              `Good Morning, Afternoon, or Evening! Let's record your standup for channel: ${channel.name}\n`
+              `Good Morning, Afternoon, or Evening! Let's record your standup for channel: ${channel.name}\n`+
               `*(Say "skip" to skip any of the questions)*\n`+
-              `*(Say "exit" to stop the update)*`
+              `*(Say "exit" to stop the interview)*`
             );
 			      // check for exit function
 						function checkForExit(response, conversation) {
