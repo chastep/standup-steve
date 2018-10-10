@@ -1,5 +1,5 @@
 # Glossary
-* [Botkit Basics](#botkit_basics)
+* [Botkit Basics](#botkit-basics)
 
 ## Botkit Basics
 
