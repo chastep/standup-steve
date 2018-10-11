@@ -18,6 +18,8 @@
 
 */
 
+const _ = require('lodash');
+
 module.exports = function (controller) {
   // listen for someone saying 'tasks' to the bot
   // reply with a list of current tasks loaded from the storage system
@@ -29,10 +31,10 @@ module.exports = function (controller) {
       if (!user || !user.tasks || user.tasks.length == 0) {
         bot.reply(message, 'There are no tasks on your list. Say `add _task_` to add something.');
       } else {
-        const text = `Here are your current tasks: \n${
-          generateTaskList(user)
-        }Reply with \`done _number_\` to mark a task completed.`;
-
+        const text = (
+          `Here are your current tasks: \n`+
+          `${generateTaskList(user)} Reply with \`done _number_\` to mark a task completed.`
+        );
         bot.reply(message, text);
       }
     });
@@ -43,14 +45,8 @@ module.exports = function (controller) {
   controller.hears(['add (.*)'], 'direct_message,direct_mention,mention', (bot, message) => {
     const newtask = message.match[1];
     controller.storage.users.get(message.user, (err, user) => {
-      if (!user) {
-        user = {};
-        user.id = message.user;
-        user.tasks = [];
-      }
-
+      if (!user.tasks) user.tasks = [];
       user.tasks.push(newtask);
-
       controller.storage.users.save(user, (err, saved) => {
         if (err) {
           bot.reply(message, `I experienced an error adding your task: ${err}`);
@@ -75,7 +71,7 @@ module.exports = function (controller) {
       // adjust for 0-based array index
       number = parseInt(number) - 1;
 
-      controller.storage.users.get(message.user, (err, user) => {
+      controller.storage.users.get(message.user, async (err, user) => {
         if (!user) {
           user = {};
           user.id = message.user;
@@ -86,15 +82,21 @@ module.exports = function (controller) {
           bot.reply(message, `Sorry, your input is out of range. Right now there are ${user.tasks.length} items on your list.`);
         } else {
           const item = user.tasks.splice(number, 1);
+          await bot.reply(message, `~${item}~`);
 
-          // reply with a strikethrough message...
-          bot.reply(message, `~${item}~`);
+          _.pull(user.tasks, item);
 
-          if (user.tasks.length > 0) {
-            bot.reply(message, `Here are our remaining tasks:\n${generateTaskList(user)}`);
-          } else {
-            bot.reply(message, 'Your list is now empty!');
-          }
+          controller.storage.users.save(user, (err, savedUser) => {
+            if (err) {
+              bot.reply(message, `I experienced an error adding your task: ${err}`);
+            } else {
+              if (savedUser.tasks.length > 0) {
+                bot.reply(message, `Here are your remaining tasks:\n${generateTaskList(savedUser)}`);
+              } else {
+                bot.reply(message, 'Your list is now empty!');
+              }
+            }
+          })
         }
       });
     }
