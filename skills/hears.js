@@ -4,15 +4,14 @@ WHAT IS THIS?
 
 This module demonstrates simple uses of Botkit's `hears` handler functions.
 
-In these examples, Botkit is configured to listen for certain phrases, and then
-respond immediately with a single line response.
+Add whatever you like, I could care less. Have fun!
 
 */
 
+const log = require('../logger')('custom:hears');
 const wordfilter = require('wordfilter');
 
 module.exports = function (controller) {
-  /* Collect some very simple runtime stats for use in the uptime/debug command */
   const stats = {
     triggers: 0,
     convos: 0,
@@ -26,6 +25,30 @@ module.exports = function (controller) {
     stats.convos++;
   });
 
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* Utility function to format uptime */
+  function formatUptime(uptime) {
+    let unit = 'second';
+    if (uptime > 60) {
+      uptime /= 60;
+      unit = 'minute';
+    }
+    if (uptime > 60) {
+      uptime /= 60;
+      unit = 'hour';
+    }
+    if (uptime != 1) {
+      unit = `${unit}s`;
+    }
+
+    uptime = `${parseInt(uptime)} ${unit}`;
+    return uptime;
+  }
 
   controller.hears(['^uptime', '^debug'], 'direct_message,direct_mention', (bot, message) => {
     bot.createConversation(message, (err, convo) => {
@@ -52,29 +75,22 @@ module.exports = function (controller) {
     }
   });
 
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~CUSTOM~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  controller.hears(['^do you like sand?'], 'direct_message,direct_mention', (bot, message) => {
+    if (message.match[0]) {
+      bot.reply(message, `I don't like sand. It's coarse, and rough, and irritating, and it gets everywhere.`);
+    }
+  });
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* Utility function to format uptime */
-  function formatUptime(uptime) {
-    let unit = 'second';
-    if (uptime > 60) {
-      uptime /= 60;
-      unit = 'minute';
+  controller.hears(['^hello there'], 'direct_message,direct_mention', (bot, message) => {
+    if (message.match[0]) {
+      bot.reply(message, `https://media.giphy.com/media/Nx0rz3jtxtEre/giphy-downsized.gif`);
     }
-    if (uptime > 60) {
-      uptime /= 60;
-      unit = 'hour';
-    }
-    if (uptime != 1) {
-      unit = `${unit}s`;
-    }
+  });
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~CUSTOM~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-    uptime = `${parseInt(uptime)} ${unit}`;
-    return uptime;
-  }
 };

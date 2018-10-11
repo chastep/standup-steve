@@ -2,11 +2,12 @@
 // this process will edit the reminder time for a channel:
 //
 
-var log = require('../logger')('custom:set_reminder');
+const log = require('../logger')('custom:set_reminder');
 const timeHelper = require('../helpers/time.js');
+const common = require('../helpers/common.js');
 
 function setReminder(bot, message) {
-  log.verbose(`Heard a request to set a standup reminder: ${message.match[0]}`);
+  log.verbose(`heard a request to set a standup reminder: ${message.match[0]}`);
 
   const reminderMinutes = message.match[2];
 
@@ -20,15 +21,20 @@ function setReminder(bot, message) {
       if (chan.standup.reminderTime) {
         const newReminderTime = timeHelper.getReminderFormat(chan.standup.time, reminderMinutes);
         chan.standup.reminderTime = newReminderTime;
+        chan.reminderMinutes = reminderMinutes;
 
         bot.botkit.storage.channels.save(chan, (error, channel) => {
           if (error) {
             bot.reply(message, `I experienced an error updating this channels standup: ${error}`);
             log.error(error);
           } else {
-            bot.reply(message, `Got it. Reminder is set for ${timeHelper.getDisplayFormat(channel.standup.reminderTime)} :thumbsup:`);
-            log.info(`Got it. Reminder is set for ${timeHelper.getDisplayFormat(channel.standup.reminderTime)} :thumbsup:`);
-            log.info('channel has been successfully updated');
+            bot.reply(
+              message,
+              common.standupInfoBlob(channel)+
+              `\n:thumbsup: :standup: Successfully Updated :thumbsup:`
+            );
+            log.info(`reminder is set for ${timeHelper.getDisplayFormat(channel.standup.reminderTime)} :thumbsup:`);
+            log.info(`channel has been successfully updated`);
             log.info(channel);
           }
         });

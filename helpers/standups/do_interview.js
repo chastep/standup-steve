@@ -90,15 +90,11 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
           // first check to see if standup has already been reported
 		      // then check to see if a standup has already been recorded for the day
           if (parseFloat(timeHelper.getScheduleFormat()) >= parseFloat(channel.standup.time)) {
-            log.verbose(channel.name+' already reported a standup today');
-            convo.say(
-              'Look\'s like channel '+channel.name+' already reported a standup today :/'
-            );
+            log.verbose(`${channel.name} already reported a standup today`);
+            convo.say(`Look's like channel ${channel.name} already reported a standup today :/`);
           } else if (userStandups.length && timeHelper.datesAreSameDay(userStandups[userStandups.length - 1].date, new Date())) {
-	      		log.verbose(interviewUser+' already completed a standup for '+channel.name+' today');
-            convo.say(
-              'Look\'s like you already recorded a standup for channel: '+channel.name+'. Good Job! :thumbsup:'
-            );
+	      		log.verbose(`${interviewUser} already completed a standup for ${channel.name} today`);
+            convo.say(`Look's like you already recorded a standup for channel: ${channel.name}. Good Job! :thumbsup:`);
             convo.ask(
               `Would you like to update that response now? :thinking_face:\n`+
               `*(Respond 'yes' to edit or 'no' to exit)*`,
@@ -137,7 +133,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
               action: 'default',
             }, 'bad_response');
 			    } else {
-			      log.verbose('Starting the interview for '+interviewUser+' in '+interviewChannel);
+			      log.verbose(`starting the interview for ${interviewUser} in ${interviewChannel}`);
 			      convo.say(
               `Good Morning, Afternoon, or Evening! Let's record your standup for channel: ${channel.name}\n`+
               `*(Say "skip" to skip any of the questions)*\n`+
@@ -180,7 +176,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 						        bot.reply(message, `I experienced an error saving this user standup: ${e}`);
 						      } else {
 						      	log.info(newStand);
-						        log.verbose('Standup info recorded for ' + newStand.userInfo.realName);
+						        log.verbose(`Standup info recorded for ${newStand.userInfo.realName}`);
                     bot.say({
                       text: `Thanks! Your recorded standup for channel: ${channel.name} is below`,
                       attachments: [ getStandupReport(newStand) ],
@@ -189,8 +185,8 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
 						      }
 							  })
 							} else {
-								log.verbose('User exited standup interview');
-								bot.say('You have exited the standup. Please emoji again on the channel reminder to record a new standup.');
+								log.verbose(`user exited standup interview`);
+                bot.say(`You have exited the standup. Please emoji again on the channel reminder to record a new standup.`);
 							}
 						})
 			    }

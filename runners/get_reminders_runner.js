@@ -20,9 +20,8 @@ function collectTimeMatchedChannels(channels, where) {
 }
 
 function runReminders(bot) {
-  log.verbose('Attempting to run channel reminders :D');
+  log.verbose('attempting to run channel reminders :D');
 
-  // Don't run if today is a federal holiday
   if (fedHolidays.isAHoliday()) {
     return;
   }
@@ -34,30 +33,31 @@ function runReminders(bot) {
 
   bot.botkit.storage.channels.all(async (err, channels) => {
     if (err) {
-      log.error('Encountered error trying to get all channels: ', err);
+      log.error(`encountered error trying to get all channels: ${err}`);
       return;
     }
 
     const selected_channels = await collectTimeMatchedChannels(channels, where);
 
     if (selected_channels.length > 0) {
-      log.info(`Sending reminders for ${selected_channels.length} channel(s)`);
+      log.info(`sending reminders for ${selected_channels.length} channel(s)`);
 
       // Iterate over the selected_channels
       _.each(selected_channels, (channel) => {
         const reminder = {
-          text: `<!here> :hourglass: There's a standup in ${channel.reminderMinutes} minutes! `
-             + 'To submit your standup add any emoji to this message and I\'ll DM you to get your standup info.',
+          text: 
+            `<!here> :hourglass: There's a standup in ${channel.reminderMinutes} minutes! :hourglass:\n`+
+            `To submit your standup add any emoji to this message and I'll DM you to get your standup info.`,
           attachments: [],
           channel: channel.id,
           as_user: true
         };
         bot.api.chat.postMessage(reminder, (err, response) => {
         	if (err) {
-            log.error('Error sending reminder: ', err);
+            log.error(`error sending reminder: ${err}`);
             return;
           }
-        	log.verbose(`Sending channel reminder :D - ${channel.name}`);
+        	log.verbose(`sending channel reminder :D - ${channel.name}`);
           if (!err) {
             bot.api.reactions.add({
               name: 'wave',
@@ -68,7 +68,7 @@ function runReminders(bot) {
         });
       });
     } else {
-    	log.verbose('There are no channels eligible for reminding - PEACE');
+    	log.verbose(`there are no channels eligible for reminding - PEACE`);
     }
   });
 }

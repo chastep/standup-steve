@@ -33,7 +33,7 @@ function updateStandup(answers, standupToUpdate) {
 }
 
 module.exports = function doInterview(bot, interviewChannel, interviewUser) {
-  log.verbose('Preparing to update an interview with '+interviewUser+' for channel ' + interviewChannel);
+  log.verbose(`preparing to update an interview with ${interviewUser} for channel ${interviewChannel}`);
 
   // find channel
   bot.botkit.storage.channels.get(interviewChannel, (err, channel) => { 
@@ -43,7 +43,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
       log.info('channel is present');
       bot.botkit.storage.standups.all(async (err, standups) => {
         if (err) {
-          log.error(`Problem finding all standups: ${err}`);
+          log.error(`problem finding all standups: ${err}`);
         }
 
         var userStandupToUpdate = await collectLastUserStandup(standups, interviewUser);
@@ -80,7 +80,7 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
             }
           ];
           
-          log.verbose('Starting the update for '+interviewUser+' in '+interviewChannel);
+          log.verbose(`starting the update for ${interviewUser} in ${interviewChannel}`);
           convo.say(
             `Okay, let's get started! :simple_smile:\n`+
             `*(Say "skip" to skip any of the questions and keep previous answer)*\n`+
@@ -99,13 +99,15 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
           }
 
           _.each(sections, (section) => {
-            convo.say(
+            var message = (
               `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
               `*Question* - ${section.question}\n`+
               `*Previous Response* - ${section.answer}\n`+
-              `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+              `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
+              `:point_down: New Response? :point_down:`
             );
-            convo.ask(section.question, function(response, conversation) {
+
+            convo.ask(message, function(response, conversation) {
               if (!checkForExit(response, conversation)) {
                 if (!response.text.match(/^skip$/ig)) {
                   answers[section.name] = response.text;
@@ -128,17 +130,17 @@ module.exports = function doInterview(bot, interviewChannel, interviewUser) {
                   bot.reply(message, `I experienced an error saving this user standup: ${e}`);
                 } else {
                   log.info(updatedStand);
-                  log.verbose('Standup info recorded for ' + updatedStand.userInfo.realName);
+                  log.verbose(`standup info recorded for ${updatedStand.userInfo.realName}`);
                   bot.say({
-                    text: 'Thanks! Your standup for '+channel.name+' has been updated. It will look like:',
+                    text: `Thanks! Your standup for ${channel.name} has been updated. It will look like:`,
                     attachments: [ getStandupReport(updatedStand) ],
                     channel: interviewUser
                   });
                 }
               })
             } else {
-              log.verbose('User exited standup interview');
-              bot.say('You have exited the standup. Please emoji again on the channel reminder to record a new standup.');
+              log.verbose(`user exited standup interview`);
+              bot.say(`You have exited the standup. Please emoji again on the channel reminder to record a new standup.`);
             }
           })
         })
