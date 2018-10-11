@@ -4,6 +4,7 @@
 
 const log = require('../logger')('custom:get_standup:');
 const timeHelper = require('../helpers/time.js');
+const common = require('../helpers/common.js');
 const _ = require('lodash');
 
 function getStandupInfo(bot, message) {
@@ -18,7 +19,7 @@ function getStandupInfo(bot, message) {
       if (_.isEmpty(channel.standup)) {
         bot.reply(message, 'There\'s no standup scheduled yet.');
       } else {
-        bot.reply(message, `There's a standup scheduled for ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)}`);
+        bot.reply(message, common.standupInfoBlob(channel));
         log.info(channel.standup);
       }
     }

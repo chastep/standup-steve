@@ -9,12 +9,10 @@ const timeHelper = require('./time.js');
 module.exports = function createNewChannelReport(bot, channel, standups) {
   const report = reportForChannel(channel, standups);
 
-  log.verbose(`Sending report for ${channel.name}`);
+  log.verbose(`sending report for ${channel.name}`);
 
   const standupNotice = {
     text: `:point_down: ${timeHelper.getCurrentReportDate()} Standup :point_down:`,
-    // `If you missed the standup, you can still submit! Just emoji one of my ` +
-    // `messages in the next few minutes and I'll include you.`,
     attachments: [],
     channel: channel.name,
   };
@@ -24,7 +22,7 @@ module.exports = function createNewChannelReport(bot, channel, standups) {
       if (err) {
         log.error(err);
       } else {
-        log.verbose(`Report successfully sent for ${channel.name}`);
+        log.verbose(`report successfully sent for ${channel.name}`);
       }
     });
   });

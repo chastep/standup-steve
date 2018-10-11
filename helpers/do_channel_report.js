@@ -22,7 +22,7 @@ function gatherTodaysStandups(standups) {
 }
 
 module.exports = function doChannelReport(bot, channel_id) {
-  log.verbose(`Attempting to run standup report for ${channel_id}`);
+  log.verbose(`attempting to run standup report for ${channel_id}`);
 
   bot.botkit.storage.channels.get(channel_id, (err, channel) => {
     if (!channel) {
@@ -31,12 +31,12 @@ module.exports = function doChannelReport(bot, channel_id) {
       log.info('channel is present');
       bot.botkit.storage.standups.all((err, standups) => {
         if (err) {
-          log.error('Encountered error trying to get all standups: ', err);
+          log.error(`encountered error trying to get all standups: ${err}`);
         }
         const reportableStandups = gatherTodaysStandups(standups);
         async.series([
           function (callback) {
-            log.info('creating channel standup report');
+            log.info(`creating channel standup report`);
             createNewChannelReport(bot, channel, reportableStandups);
             callback(null);
           }, function () {},

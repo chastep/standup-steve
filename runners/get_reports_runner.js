@@ -21,7 +21,7 @@ function collectTimeMatchedChannels(channels, where) {
 }
 
 function runReports(bot) {
-  log.verbose('Attempting to run channel standup reports :D');
+  log.verbose('attempting to run channel standup reports :D');
 
   if (fedHolidays.isAHoliday()) {
     return;
@@ -34,20 +34,20 @@ function runReports(bot) {
 
   bot.botkit.storage.channels.all(async (err, channels) => {
     if (err) {
-      log.error('Encountered error trying to get all channels: ', err);
+      log.error(`encountered error trying to get all channels: ${err}`);
       return;
     }
 
     const selected_channels = await collectTimeMatchedChannels(channels, where);
 
     if (selected_channels.length > 0) {
-      log.info(`Reporting standups for ${channels.length} channel(s)`);
+      log.info(`reporting standups for ${channels.length} channel(s)`);
       _.each(selected_channels, (channel) => {
-        log.verbose('Starting to run channel report for '+channel.id);
+        log.verbose(`starting to run channel report for ${channel.id}`);
         doChannelReport(bot, channel.id);
       });
     } else {
-      log.verbose('There are no channels eligible for reporting - PEACE');
+      log.verbose(`there are no channels eligible for reporting - PEACE`);
     }
   });
 }

@@ -12,12 +12,14 @@ function createNewUsers(bot, userIds) {
       if (err) {
         bot.reply(message, `I experienced an error finding user: ${err}`);
         log.error(err);
+        return;
       }
       // check to see if existing user and save if so
       await bot.botkit.storage.users.get(response.user.id, (err, usr) => {
         if (err) {
           bot.reply(message, `I experienced an error finding user: ${err}`);
           log.error(err);
+          return;
         }
 
         if (!usr) {
@@ -39,7 +41,7 @@ function createNewUsers(bot, userIds) {
             }
           });
         } else {
-          log.info('savedUser already exists');
+          log.info('user already exists');
         }
       });
     });
@@ -59,11 +61,9 @@ function fetchChannelNameFromApi(bot, message) {
 }
 
 function joinChannel(bot, message) {
-  log.verbose('Requested to join a channel');
+  log.verbose('request to join a channel');
+  log.info(`attempt to join channel ${message.channel}`);
 
-  log.info(`Joined channel ${message.channel}`);
-
-  // store channel
   bot.botkit.storage.channels.get(message.channel, async (err, channel) => {
     if (!channel) {
       log.warn('channel does not exist');
@@ -86,10 +86,6 @@ function joinChannel(bot, message) {
     } else {
       log.info('channel already exists');
     }
-  });
-
-  bot.botkit.studio.run(bot, 'channel_join', message.user, message.channel, message).catch((err) => {
-  	log.warn(`Botkit Studio is shot: ${err}`);
   });
 }
 

@@ -7,7 +7,10 @@ const timeHelper = require('../helpers/time.js');
 const _ = require('lodash');
 
 function removeStandup(bot, message) {
-  log.verbose(`Heard a request to remove a standup: \n${message.match[0]}`);
+  log.verbose(
+    `heard this request: \n`+
+    `${message.match[0]}`
+  );
 
   bot.botkit.storage.channels.get(message.channel, (err, channel) => {
     if (!channel) {
@@ -15,7 +18,7 @@ function removeStandup(bot, message) {
       log.error('channel is not present!');
     } else {
       log.info('channel is present');
-      console.log(channel);
+
       if (!_.isEmpty(channel.standup)) {
         channel.standup = {};
         bot.botkit.storage.channels.save(channel, (err, channel) => {
@@ -24,12 +27,12 @@ function removeStandup(bot, message) {
             log.error(err);
           } else {
             bot.reply(message, 'Standup removed :thumbsup:');
-            log.info('Channel standup has been removed');
+            log.info('channel standup has been removed');
             log.info(channel);
           }
         });
       } else {
-        bot.reply(message, 'This channel doesn\'t have a standup scheduled');
+        bot.reply(message, `This channel doesn't have a standup scheduled`);
       }
     }
   });
