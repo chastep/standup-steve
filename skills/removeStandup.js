@@ -38,9 +38,11 @@ function removeStandup(bot, message) {
   });
 }
 
-function attachRemoveStandupListener(controller) {
+function attachSkill(controller) {
   controller.hears(['(remove|delete) standup'], ['direct_mention'], removeStandup);
   log.verbose('ATTACHED');
 }
 
-module.exports = attachRemoveStandupListener;
+module.exports = {
+  attachSkill,
+}

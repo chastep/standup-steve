@@ -7,7 +7,7 @@ const async = require('async');
 const _ = require('lodash');
 const log = require('../logger')('custom:do_channel_report:');
 const timeHelper = require('./time.js');
-const createNewChannelReport = require('./create_new_channel_report.js');
+const createNewChannelReport = require('./createChannelReport.js');
 
 function gatherTodaysStandups(standups) {
   const todaysStandups = [];

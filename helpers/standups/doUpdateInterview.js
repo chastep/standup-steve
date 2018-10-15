@@ -12,7 +12,7 @@
 const log = require('../../logger')('custom:update_interview:');
 const timeHelper = require('../time.js');
 const _ = require('lodash');
-const getStandupReport = require('./get_standup_report.js');
+const getStandupReport = require('./getStandupReport.js');
 
 // find last standups for user
 function collectLastUserStandup(standups, interviewUser) {
@@ -32,7 +32,7 @@ function updateStandup(answers, standupToUpdate) {
   return standup;
 }
 
-module.exports = function doInterview(bot, interviewChannel, interviewUser) {
+module.exports = function doUpdateInterview(bot, interviewChannel, interviewUser) {
   log.verbose(`preparing to update an interview with ${interviewUser} for channel ${interviewChannel}`);
 
   // find channel

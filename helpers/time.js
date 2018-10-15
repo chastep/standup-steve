@@ -144,15 +144,15 @@ function datesAreSameDay(date1, date2) {
 }
 
 module.exports = {
-  getTimeFromString: getTimeFromString,
-  getScheduleFormat: getScheduleFormat,
-  getScheduleDay: getScheduleDay,
-  getDisplayFormat: getDisplayFormat,
-  getDisplayFormatForDays: getDisplayFormatForDays,
-  getDisplayFormatForDaysOfChannel: getDisplayFormatForDaysOfChannel,
-  getReportFormat: getReportFormat,
-  getCurrentDate: getCurrentDate,
-  getCurrentReportDate: getCurrentReportDate,
-  getReminderFormat: getReminderFormat,
-  datesAreSameDay: datesAreSameDay
+  getTimeFromString,
+  getScheduleFormat,
+  getScheduleDay,
+  getDisplayFormat,
+  getDisplayFormatForDays,
+  getDisplayFormatForDaysOfChannel,
+  getReportFormat,
+  getCurrentDate,
+  getCurrentReportDate,
+  getReminderFormat,
+  datesAreSameDay,
 };

@@ -2,8 +2,8 @@
 // starts an interview with a user if they add emoji to channel reminder message
 //
 
-const log = require('../logger')('custom:emoji_response:');
-var doInterview = require('../helpers/standups/do_interview.js');
+const log = require('../logger')('custom:startDmEmojiInterview:');
+var doInterview = require('../helpers/standups/doInterview.js');
 
 // needs to be tested
 function createNewUser(bot, userId) {
@@ -50,8 +50,8 @@ async function startDmEmojiInterview(bot, message) {
   });
 }
 
-function attachStartDmEmojiInterviewListener(controller) {
-  controller.on('reaction_added', (bot, message) => {
+function attachSkill(controller) {
+  controller.on(['reaction_added'], (bot, message) => {
   	bot.identifyBot((err, i) => {
   		if (message.item_user === i.id && message.user !== i.id) {
 	      startDmEmojiInterview(bot, message);
@@ -61,4 +61,6 @@ function attachStartDmEmojiInterviewListener(controller) {
   log.verbose('ATTACHED');
 }
 
-module.exports = attachStartDmEmojiInterviewListener;
+module.exports = {
+  attachSkill,
+};

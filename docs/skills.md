@@ -4,11 +4,11 @@
 
 To create a new standup or reschedule one, first ensure that the bot is in the channel that the standup is for.  Then say:
 
-`@Standup Steve schedule standup for 10am`
+`@Standup Steve schedule standup 10am`
 
 Additionally, you can schedule the standups for just certain days of the week:
 
-`@Standup Steve schedule standup for 10am M W F`
+`@Standup Steve schedule standup 10am M W F`
 
 Some things to note:
 

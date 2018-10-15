@@ -3,7 +3,7 @@
 //
 
 const log = require('../logger')('custom:create_new_channel_report:');
-const reportForChannel = require('./reports/for_channel.js');
+const reportForChannel = require('./reports/forChannel.js');
 const timeHelper = require('./time.js');
 
 module.exports = function createNewChannelReport(bot, channel, standups) {

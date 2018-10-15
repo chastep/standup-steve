@@ -3,8 +3,10 @@
 // and create a channel if it isn't present
 //
 
-const log = require('../logger')('botkit:channel_join:');
+const log = require('../logger')('custom:join_channel:');
 const _ = require('lodash');
+const Channel = require('../repositories/channel');
+const User = require('../repositories/user');
 
 function createNewUsers(bot, userIds) {
   _.each(userIds, async (userId) => {
@@ -49,6 +51,7 @@ function createNewUsers(bot, userIds) {
 };
 
 function fetchChannelNameFromApi(bot, message) {
+  log.info(message);
   return new Promise((res, rej) => {
     bot.api.channels.info({ channel: message.channel }, async (err, response) => {
       if (err) {
@@ -60,36 +63,38 @@ function fetchChannelNameFromApi(bot, message) {
   });
 }
 
-function joinChannel(bot, message) {
+async function joinChannel(bot, message) {
   log.verbose('request to join a channel');
   log.info(`attempt to join channel ${message.channel}`);
 
-  bot.botkit.storage.channels.get(message.channel, async (err, channel) => {
-    if (!channel) {
-      log.warn('channel does not exist');
+  const currentChannel = await Channel.getById(bot, message.channel);
 
-      var channel = {};
-      channel.id = message.channel;
-      channel.name = await fetchChannelNameFromApi(bot, message);
-      channel.standup = {};
-      channel.reminderMinutes = 30;
+  if (currentChannel) {
+    log.info('channel already exists');
+    return;
+  }
 
-      bot.botkit.storage.channels.save(channel, (err, channel) => {
-	 			if (err) {
-	        bot.reply(message, `I experienced an error joining the channel: ${err}`);
-	        log.error(err);
-	      } else {
-	      	log.info('channel has been successfully saved');
-	  			log.info(channel);
-	      }
- 			});
-    } else {
-      log.info('channel already exists');
-    }
-  });
-}
+  log.warn('channel does not exist');
 
-module.exports = function attachJoinChannelListener(controller) {
-  controller.on('bot_channel_join', joinChannel);
+  const channel = {};
+  channel.id = message.channel;
+  channel.name = await fetchChannelNameFromApi(bot, message);
+  channel.standup = {};
+  channel.reminderMinutes = 30;
+
+  const newChannel = await Channel.save(bot, channel);
+
+  bot.reply(message, `Hi everyone in ${newChannel.name}!`);
+  log.info('channel has been successfully saved');
+  log.info(newChannel);
+};
+
+function attachSkill(controller) {
+  controller.on(['bot_channel_join'], joinChannel);
   log.verbose('ATTACHED');
+};
+
+module.exports = {
+  joinChannel,
+  attachSkill,
 };

@@ -5,7 +5,7 @@
 const log = require('../logger')('custom:report_runner:');
 const _ = require('lodash');
 const timeHelper = require('../helpers/time.js');
-const doChannelReport = require('../helpers/do_channel_report.js');
+const doChannelReport = require('../helpers/doChannelReport.js');
 const fedHolidays = require('@18f/us-federal-holidays');
 
 function collectTimeMatchedChannels(channels, where) {

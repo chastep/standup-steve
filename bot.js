@@ -77,9 +77,10 @@ controller.spawn({
       log.info(`Bot name: ${identity.name}`);
 
       // loads all skills present
+      // TODO: Only grab js files in /skills directory
       const normalizedPath = require('path').join(__dirname, 'skills');
       require('fs').readdirSync(normalizedPath).forEach((file) => {
-        require(`./skills/${file}`)(controller);
+        require(`./skills/${file}`).attachSkill(controller);
       });
       log.verbose('All bot skills loaded :D');
 

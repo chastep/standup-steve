@@ -18,13 +18,14 @@
 
 */
 
+const log = require('../logger')('custom:sample_taskbot');
 const _ = require('lodash');
 
-module.exports = function (controller) {
+function sampleTaskbot(controller) {
   // listen for someone saying 'tasks' to the bot
   // reply with a list of current tasks loaded from the storage system
   // based on this user's id
-  controller.hears(['tasks', 'todo'], 'direct_message', (bot, message) => {
+  controller.hears(['tasks', 'todo'],['direct_message'], (bot, message) => {
     // load user from storage...
     controller.storage.users.get(message.user, (err, user) => {
       // user object can contain arbitary keys. we will store tasks in .tasks
@@ -42,7 +43,7 @@ module.exports = function (controller) {
 
   // listen for a user saying "add <something>", and then add it to the user's list
   // store the new list in the storage system
-  controller.hears(['add (.*)'], 'direct_message,direct_mention,mention', (bot, message) => {
+  controller.hears(['add (.*)'],['direct_message,direct_mention,mention'], (bot, message) => {
     const newtask = message.match[1];
     controller.storage.users.get(message.user, (err, user) => {
       if (!user.tasks) user.tasks = [];
@@ -62,7 +63,7 @@ module.exports = function (controller) {
   });
 
   // listen for a user saying "done <number>" and mark that item as done.
-  controller.hears(['done (.*)'], 'direct_message', (bot, message) => {
+  controller.hears(['done (.*)'],['direct_message'], (bot, message) => {
     let number = message.match[1];
 
     if (isNaN(number)) {
@@ -113,4 +114,14 @@ module.exports = function (controller) {
 
     return text;
   }
+};
+
+function attachSkill(controller) {
+  sampleTaskbot;
+  log.verbose('ATTACHED');
+};
+
+module.exports = {
+  sampleTaskbot,
+  attachSkill,
 };

@@ -8,7 +8,7 @@ const common = require('../helpers/common.js');
 const _ = require('lodash');
 
 function getStandupInfo(bot, message) {
-  log.verbose(`Heard this request - ${message.match[0]}`);
+  log.verbose(`heard this request - ${message.match[0]}`);
 
   bot.botkit.storage.channels.get(message.channel, (err, channel) => {
     if (!channel) {
@@ -24,11 +24,13 @@ function getStandupInfo(bot, message) {
       }
     }
   });
-}
+};
 
-function attachGetStandupListener(controller) {
+function attachSkill(controller) {
   controller.hears(['^when'], ['direct_mention'], getStandupInfo);
   log.verbose('ATTACHED');
-}
+};
 
-module.exports = attachGetStandupListener;
+module.exports = {
+  attachSkill,
+};

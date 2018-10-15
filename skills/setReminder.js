@@ -45,7 +45,12 @@ function setReminder(bot, message) {
   });
 }
 
-module.exports = function attachSetReminderListener(controller) {
+function attachSkill(controller) {
   controller.hears(['remind(er)? (\\d*)'],['direct_mention'], setReminder);
   log.verbose('ATTACHED');
+};
+
+module.exports = {
+  setReminder,
+  attachSkill,
 };

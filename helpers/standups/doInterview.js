@@ -12,8 +12,8 @@
 const log = require('../../logger')('custom:do_interview:');
 const timeHelper = require('../time.js');
 const _ = require('lodash');
-const getStandupReport = require('./get_standup_report.js');
-const updateInterview = require('./update_interview.js')
+const getStandupReport = require('./getStandupReport.js');
+const updateInterview = require('./doUpdateInterview.js')
 const common = require('../common.js');
 
 // find all standups for user

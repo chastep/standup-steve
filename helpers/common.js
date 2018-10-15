@@ -11,7 +11,6 @@ function standupInfoBlob(channel) {
   )
 }
 
-
 async function collectUserInfo(bot, userId) {
   return await bot.botkit.storage.users.get(userId, async (err, response) => {
     if (err) {
@@ -22,6 +21,6 @@ async function collectUserInfo(bot, userId) {
 };
 
 module.exports = {
-  collectUserInfo: collectUserInfo,
-  standupInfoBlob: standupInfoBlob,
+  collectUserInfo,
+  standupInfoBlob,
 };
