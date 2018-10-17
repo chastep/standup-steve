@@ -10,8 +10,8 @@ const User = require('../repositories/user');
 
 function createNewUsers(bot, userIds) {
   _.each(userIds, async (userId) => {
-    const userInfo = await User.getInfoById(bot, userId);
-    
+    const userInfo = await User.getInfo(bot, userId);
+
     const findUser = await User.getById(bot, userInfo.user.id)
 
     if (findUser) {
@@ -35,7 +35,7 @@ function createNewUsers(bot, userIds) {
 };
 
 async function fetchChannelNameFromApi(bot, message) {
-  const channelInfo = await Channel.getInfoFromMessage(bot, message);
+  const channelInfo = await Channel.getInfo(bot, message);
 
   await createNewUsers(bot, channelInfo.channel.members);
 

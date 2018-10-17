@@ -7,6 +7,7 @@
 const log = require('../logger')('custom:create_channel_standup');
 const timeHelper = require('../helpers/time.js');
 const common = require('../helpers/common.js');
+const Channel = require('../repositories/channel');
 
 function createNewStandup(channel, schedule) {
   const newStandup = {};
@@ -17,46 +18,34 @@ function createNewStandup(channel, schedule) {
   return newStandup;
 }
 
-function createChannelStandup(bot, message) {
-  log.verbose(
-    `heard this request: \n`+
-    `${message.match[0]}`
-  );
+async function createChannelStandup(bot, message) {
+  log.verbose(`heard this request: ${message.match[0]}`);
 
-  bot.botkit.storage.channels.get(message.channel, (err, chan) => {
-    if (!chan) {
-      bot.reply(message, `I experienced an error finding this channel: ${err}`);
-      log.error('channel is not present!');
-    } else {
-      log.info('channel is present');
+  const currentChannel = await Channel.getById(bot, message.channel);
 
-      const schedule = timeHelper.getTimeFromString(message.match[2]);
-      if (schedule !== false) {
-        log.info(schedule);
+  log.info('channel is present');
 
-        chan.standup = createNewStandup(chan, schedule);
+  const schedule = timeHelper.getTimeFromString(message.match[2]);
 
-        bot.botkit.storage.channels.save(chan, (error, channel) => {
-          if (error) {
-            bot.reply(message, `I experienced an error updating this channels standup: ${error}`);
-            log.error(error);
-          } else {
-            bot.reply(
-              message,
-              common.standupInfoBlob(channel)+
-              `\n:thumbsup: :standup: Successfully Saved :thumbsup:`
-            );
-            log.info(`standup scheduled for ${message.channel} at ${timeHelper.getDisplayFormat(channel.standup.time)} on ${timeHelper.getDisplayFormatForDays(channel.standup.days)}`);
-            log.info(`channel has been successfully saved`);
-            log.info(channel);
-          }
-        });
-      } else {
-        bot.reply(message, ':x: Incorrect time format! Please try again. :x:');
-        log.warn('incorrect time format');
-      }
-    }
-  });
+  if (schedule !== false) {
+    log.info(schedule);
+
+    currentChannel.standup = createNewStandup(currentChannel, schedule);
+
+    const updatedChannel = await Channel.save(bot, currentChannel);
+
+    bot.reply(
+      message,
+      common.standupInfoBlob(updatedChannel)+
+      `\n:thumbsup: :standup: Successfully Saved :thumbsup:`
+    );
+    log.info(`standup scheduled for ${message.updatedChannel} at ${timeHelper.getDisplayFormat(updatedChannel.standup.time)} on ${timeHelper.getDisplayFormatForDays(updatedChannel.standup.days)}`);
+    log.info(`channel has been successfully saved`);
+    log.info(updatedChannel);
+  } else {
+    bot.reply(message, ':x: Incorrect time format! Please try again. :x:');
+    log.warn('incorrect time format');
+  }
 }
 
 function attachSkill(controller) {

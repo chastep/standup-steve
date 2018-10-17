@@ -11,7 +11,7 @@ class User {
     })
   };
 
-  static getInfoById(bot, userId) {
+  static getInfo(bot, userId) {
     return new Promise((resolve, reject) => {
       bot.api.users.info({ user: userId }, (error, userInfo) => {
         if (error) {
