@@ -96,7 +96,7 @@ function hearsAll(controller) {
 };
 
 function attachSkill(controller) {
-  hearsAll;
+  hearsAll(controller);
   log.verbose('ATTACHED');
 };
 

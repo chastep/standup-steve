@@ -11,9 +11,9 @@ class Channel {
     })
   };
 
-  static getInfoById(bot, id) {
+  static getInfoFromMessage(bot, message) {
     return new Promise((resolve, reject) => {
-      bot.api.channels.info(id, (error, userInfo) => {
+      bot.api.channels.info({ channel: message.channel }, (error, userInfo) => {
         if (error) {
           reject(error);
         } else {

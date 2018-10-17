@@ -10,57 +10,36 @@ const User = require('../repositories/user');
 
 function createNewUsers(bot, userIds) {
   _.each(userIds, async (userId) => {
-    await bot.api.users.info({ user: userId }, async (err, response) => {
-      if (err) {
-        bot.reply(message, `I experienced an error finding user: ${err}`);
-        log.error(err);
-        return;
-      }
-      // check to see if existing user and save if so
-      await bot.botkit.storage.users.get(response.user.id, (err, usr) => {
-        if (err) {
-          bot.reply(message, `I experienced an error finding user: ${err}`);
-          log.error(err);
-          return;
-        }
+    const userInfo = await User.getInfoById(bot, userId);
+    
+    const findUser = await User.getById(bot, userInfo.user.id)
 
-        if (!usr) {
-          log.warn('user does not exist');
+    if (findUser) {
+      log.info('user already exists');
+      return;
+    }
 
-          var newUser = {};
-          newUser.id = response.user.id;
-          newUser.realName = response.user.real_name || response.user.name;
-          newUser.timezone = response.user.tz;
-          newUser.thumbUrl = response.user.profile.image_72;
+    log.warn('user does not exist');
 
-          bot.botkit.storage.users.save(newUser, (err, savedUser) => {
-            if (err) {
-              bot.reply(message, `I experienced an error saving this user: ${err}`);
-              log.error(err);
-            } else {
-              log.info('user has been successfully saved');
-              log.info(savedUser);
-            }
-          });
-        } else {
-          log.info('user already exists');
-        }
-      });
-    });
+    const newUser = {};
+    newUser.id = userInfo.user.id;
+    newUser.realName = userInfo.user.real_name || userInfo.user.name;
+    newUser.timezone = userInfo.user.tz;
+    newUser.thumbUrl = userInfo.user.profile.image_72;
+
+    const savedUser = await User.save(bot, newUser);
+
+    log.info('user has been successfully saved');
+    log.info(savedUser);
   })
 };
 
-function fetchChannelNameFromApi(bot, message) {
-  log.info(message);
-  return new Promise((res, rej) => {
-    bot.api.channels.info({ channel: message.channel }, async (err, response) => {
-      if (err) {
-        return rej(err);
-      }
-      await createNewUsers(bot, response.channel.members);
-      return res(response.channel.name);
-    });
-  });
+async function fetchChannelNameFromApi(bot, message) {
+  const channelInfo = await Channel.getInfoFromMessage(bot, message);
+
+  await createNewUsers(bot, channelInfo.channel.members);
+
+  return channelInfo.channel.name;
 }
 
 async function joinChannel(bot, message) {

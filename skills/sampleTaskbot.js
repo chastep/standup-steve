@@ -117,7 +117,7 @@ function sampleTaskbot(controller) {
 };
 
 function attachSkill(controller) {
-  sampleTaskbot;
+  sampleTaskbot(controller);
   log.verbose('ATTACHED');
 };
 
