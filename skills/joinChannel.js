@@ -12,9 +12,9 @@ function createNewUsers(bot, userIds) {
   _.each(userIds, async (userId) => {
     const userInfo = await User.getInfo(bot, userId);
 
-    const findUser = await User.getById(bot, userInfo.user.id)
+    const currentUser = await User.getById(bot, userInfo.user.id)
 
-    if (findUser) {
+    if (currentUser) {
       log.info('user already exists');
       return;
     }
