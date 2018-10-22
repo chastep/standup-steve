@@ -12,7 +12,7 @@ module.exports = function createNewChannelReport(bot, channel, standups) {
   log.verbose(`sending report for ${channel.name}`);
 
   const standupNotice = {
-    text: `:point_down: ${timeHelper.getCurrentReportDate()} Standup :point_down:`,
+    text: `:point_down: ${timeHelper.getCurrentReportDate()} Standup`,
     attachments: [],
     channel: channel.name,
   };
