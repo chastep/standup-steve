@@ -1,8 +1,5 @@
-// this is necessary for local development
 require('dotenv').config();
 
-// check for necessary env vars
-// exit if they are not present
 if (!process.env.SLACK_TOKEN || !process.env.MONGODB_URI || !process.env.LOG_LEVEL || !process.env.TIMEZONE) {
   usage_tip();
   process.exit(1);
@@ -15,14 +12,10 @@ function usage_tip() {
   console.log('~~~~~~~~~~');
 }
 
-// libs needed for startup
-// kick up a new Botkit and debug protocol
 const Botkit = require('botkit');
 const debug = require('debug')('botkit:main');
 const log = require('./logger')('app');
-// logger setup
 const bkLogger = require('./logger')('botkit');
-// other necessary libs
 const schedule = require('node-schedule');
 
 function bkLog(level) {
@@ -31,7 +24,6 @@ function bkLog(level) {
     args.push(arguments[i]);
   }
 
-  // Remap botkit log levels
   if (level === 'debug') {
     return;
   }
@@ -55,7 +47,6 @@ function bkLog(level) {
   fn.apply(thisObj, args);
 }
 
-// local development && base bot production setup
 var controller = Botkit.slackbot({
   debug: false,
   logger: { log: bkLog },
@@ -76,14 +67,13 @@ controller.spawn({
     bot.identifyBot((err, identity) => {
       log.info(`Bot name: ${identity.name}`);
 
-      // loads all skills present
+      // TODO: Only grab js files in /skills directory
       const normalizedPath = require('path').join(__dirname, 'skills');
       require('fs').readdirSync(normalizedPath).forEach((file) => {
-        require(`./skills/${file}`)(controller);
+        require(`./skills/${file}`).attachSkill(controller);
       });
       log.verbose('All bot skills loaded :D');
 
-      // Set up cron job to check every minute for channels that need a standup report
       botRunners = require('./runners');
       if (process.env.WEEKEND_DEV) {
         schedule.scheduleJob('* * * * 0-6', botRunners.getReportsRunner(bot));

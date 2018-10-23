@@ -9,7 +9,8 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
-    "reload-start": "nodemon bot.js"
+    "reload-start": "nodemon bot.js",
+    "test": "jest"
   },
   "dependencies": {
     "@18f/us-federal-holidays": "^1.1.1",
@@ -39,7 +40,9 @@
     "request": "^2.79.0",
     "wordfilter": "^0.2.6"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
   "bugs": {
     "url": "https://github.com/howdyai/botkit-starter-slack/issues"
   },

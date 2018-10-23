@@ -1,10 +1,6 @@
-//
-// gathers all standup reports into an attachments object
-//
-
-const log = require('../../logger')('custom:convert_standups:');
+const log = require('../../logger')('custom:convertStandups');
 const _ = require('lodash');
-const standupReport = require('../standups/get_standup_report.js');
+const standupReport = require('../standups/getStandupReport');
 
 module.exports = function convertStandups(standups) {
   const attachments = [];

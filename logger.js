@@ -1,5 +1,3 @@
-
-
 const Logger = require('@erdc-itl/simple-logger');
 
 Logger.setOptions({

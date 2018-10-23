@@ -1,10 +1,6 @@
-//
-// this process kicks off the new channel report process
-//
-
-const log = require('../logger')('custom:create_new_channel_report:');
-const reportForChannel = require('./reports/for_channel.js');
-const timeHelper = require('./time.js');
+const log = require('../logger')('custom:createNewChannelReport');
+const reportForChannel = require('./reports/forChannel');
+const timeHelper = require('./time');
 
 module.exports = function createNewChannelReport(bot, channel, standups) {
   const report = reportForChannel(channel, standups);
@@ -12,7 +8,7 @@ module.exports = function createNewChannelReport(bot, channel, standups) {
   log.verbose(`sending report for ${channel.name}`);
 
   const standupNotice = {
-    text: `:point_down: ${timeHelper.getCurrentReportDate()} Standup :point_down:`,
+    text: `:point_down: ${timeHelper.getCurrentReportDate()} Standup`,
     attachments: [],
     channel: channel.name,
   };

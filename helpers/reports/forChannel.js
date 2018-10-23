@@ -1,9 +1,5 @@
-//
-// this process creates a new channel report with associated attachements for an individual channel
-//
-
-const log = require('../../logger')('custom:for_channel:');
-const convertStandups = require('./convert_standups.js');
+const log = require('../../logger')('custom:forChannel');
+const convertStandups = require('./convertStandups');
 // const generateFields  = require('./generateFields'); => stat reporting, icebox feature
 
 module.exports = function reportForChannel(channel, standups) {
