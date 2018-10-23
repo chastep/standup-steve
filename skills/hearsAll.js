@@ -1,14 +1,12 @@
 /*
-
 WHAT IS THIS?
 
 This module demonstrates simple uses of Botkit's `hears` handler functions.
 
 Add whatever you like, I could care less. Have fun!
-
 */
 
-const log = require('../logger')('custom:hears_all');
+const log = require('../logger')('custom:hearsAll');
 const wordfilter = require('wordfilter');
 
 function hearsAll(controller) {

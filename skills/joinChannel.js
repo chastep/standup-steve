@@ -1,4 +1,4 @@
-const log = require('../logger')('custom:join_channel:');
+const log = require('../logger')('custom:joinChannel');
 const _ = require('lodash');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');

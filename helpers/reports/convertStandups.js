@@ -1,6 +1,6 @@
-const log = require('../../logger')('custom:convert_standups:');
+const log = require('../../logger')('custom:convertStandups');
 const _ = require('lodash');
-const standupReport = require('../standups/getStandupReport.js');
+const standupReport = require('../standups/getStandupReport');
 
 module.exports = function convertStandups(standups) {
   const attachments = [];

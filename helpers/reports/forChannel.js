@@ -1,5 +1,5 @@
-const log = require('../../logger')('custom:for_channel:');
-const convertStandups = require('./convertStandups.js');
+const log = require('../../logger')('custom:forChannel');
+const convertStandups = require('./convertStandups');
 // const generateFields  = require('./generateFields'); => stat reporting, icebox feature
 
 module.exports = function reportForChannel(channel, standups) {

@@ -1,6 +1,6 @@
-const log = require('../logger')('custom:create_channel_standup');
-const timeHelper = require('../helpers/time.js');
-const common = require('../helpers/common.js');
+const log = require('../logger')('custom:createChannelStandup');
+const timeHelper = require('../helpers/time');
+const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
 
 function createNewStandup(channel, schedule) {
@@ -33,7 +33,7 @@ async function createChannelStandup(bot, message) {
       common.standupInfoBlob(updatedChannel)+
       `\n:thumbsup: :standup: Successfully Saved :thumbsup:`
     );
-    log.info(`standup scheduled for ${message.updatedChannel} at ${timeHelper.getDisplayFormat(updatedChannel.standup.time)} on ${timeHelper.getDisplayFormatForDays(updatedChannel.standup.days)}`);
+    log.info(`standup scheduled for #${updatedChannel.name} at ${timeHelper.getDisplayFormat(updatedChannel.standup.time)} on ${timeHelper.getDisplayFormatForDays(updatedChannel.standup.days)}`);
     log.info(`channel has been successfully saved`);
     log.info(updatedChannel);
   } else {

@@ -1,5 +1,5 @@
-const log = require('../logger')('custom:remove_standup:');
-const timeHelper = require('../helpers/time.js');
+const log = require('../logger')('custom:removeStandup');
+const timeHelper = require('../helpers/time');
 const _ = require('lodash');
 const Channel = require('../repositories/channel');
 

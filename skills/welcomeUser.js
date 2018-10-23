@@ -1,8 +1,4 @@
-//
-// this process will welcome new users to the channel:
-//
-
-const log = require('../logger')('custom:welcome_user');
+const log = require('../logger')('custom:welcomeUser');
 
 function attachSkill(controller) {
   controller.on(['user_channel_join,user_group_join'], (bot, message) => {

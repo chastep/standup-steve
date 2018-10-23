@@ -1,9 +1,9 @@
-const log = require('../../logger')('custom:do_interview:');
-const timeHelper = require('../time.js');
+const log = require('../../logger')('custom:doInterview');
+const timeHelper = require('../time');
 const _ = require('lodash');
-const getStandupReport = require('./getStandupReport.js');
-const updateInterviewHelper = require('./updateInterview.js')
-const common = require('../common.js');
+const getStandupReport = require('./getStandupReport');
+const updateInterviewHelper = require('./updateInterview')
+const common = require('../common');
 const Channel = require('../../repositories/channel');
 const User = require('../../repositories/user');
 const Standup = require('../../repositories/standup');
@@ -14,7 +14,7 @@ async function createNewStandup(answers, interviewChannelId, interviewUserId, bo
 	standup.channel = interviewChannelId;
 	standup.date = timeHelper.getReportFormat();
 	standup.user = interviewUserId;
-	standup.userInfo = await User.getInfo(bot, userId);
+	standup.userInfo = await User.getById(bot, interviewUserId);
   standup.answers = answers;
 
   return standup;
@@ -22,7 +22,7 @@ async function createNewStandup(answers, interviewChannelId, interviewUserId, bo
 
 async function startPrivateInterview(bot, userStandups, interviewChannel, interviewUser) {
   bot.startPrivateConversation({user: interviewUser.id}, function(response, convo) {
-    const exited = false;
+    let exited = false;
     const answers = {
       yesterday: null,
       today: null,
@@ -94,7 +94,7 @@ async function startPrivateInterview(bot, userStandups, interviewChannel, interv
 
       _.each(common.standupQuestions, (section) => {
         convo.ask(section.question, function(response, conversation) {
-          if (!common.checkForExit(response, conversation)) {
+          if (!checkForExit(response, conversation)) {
             if (!response.text.match(/^skip$/ig)) {
               answers[section.name] = response.text;
             }

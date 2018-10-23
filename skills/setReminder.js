@@ -1,6 +1,6 @@
-const log = require('../logger')('custom:set_reminder');
-const timeHelper = require('../helpers/time.js');
-const common = require('../helpers/common.js');
+const log = require('../logger')('custom:setReminder');
+const timeHelper = require('../helpers/time');
+const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
 
 async function setReminder(bot, message) {

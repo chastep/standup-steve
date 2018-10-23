@@ -1,9 +1,5 @@
-//
-// this process will post a help message to user in DM
-//
-
-const log = require('../logger')('custom:get_help:');
-const timeHelper = require('../helpers/time.js');
+const log = require('../logger')('custom:getHelp');
+const timeHelper = require('../helpers/time');
 const _ = require('lodash');
 
 function getHelp(bot, message)  {

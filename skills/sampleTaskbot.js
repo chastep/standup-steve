@@ -18,7 +18,7 @@
 
 */
 
-const log = require('../logger')('custom:sample_taskbot');
+const log = require('../logger')('custom:sampleTaskbot');
 const _ = require('lodash');
 const User = require('../repositories/user');
 

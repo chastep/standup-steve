@@ -23,6 +23,18 @@ class Channel {
     })
   };
 
+  static getAll(bot) {
+    return new Promise((resolve, reject) => {
+      bot.botkit.storage.channels.all((error, allChannels) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(allChannels);
+        }
+      })
+    })
+  };
+
   static save(bot, channel) {
     return new Promise((resolve, reject) => {
       bot.botkit.storage.channels.save(channel, (error, channel) => {

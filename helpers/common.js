@@ -1,14 +1,15 @@
+const log = require('../logger')('custom:common');
 const timeHelper = require('./time.js');
 const _ = require('lodash');
 
 function standupInfoBlob(channel) {
   return (
-    `:point_down: Standup Details :point_down:\n`+
-    `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
+    `:point_down: Standup Details\n`+
+    `~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
     `Time: ${timeHelper.getDisplayFormat(channel.standup.time)}\n`+
     `Days: ${timeHelper.getDisplayFormatForDays(channel.standup.days)}\n`+
     `Reminder Time: ${timeHelper.getDisplayFormat(channel.standup.reminderTime)}\n`+
-    `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+    `~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
   )
 }
 
@@ -41,8 +42,24 @@ const standupQuestions = [
   }
 ];
 
+function collectTimeMatchedChannels(channels, where, flag) {
+
+  const selected = [];
+  _.each(channels, (channel) => {
+    if (_.isEmpty(channel.standup)) {
+      return;
+    } else if (flag === 'reminder' && channel.standup.reminderTime === where.time && _.includes(channel.standup.days, _.capitalize(where.day))) {
+      selected.push(channel);
+    } else if (flag === 'report' && channel.standup.time === where.time && _.includes(channel.standup.days, _.capitalize(where.day))) {
+      selected.push(channel);
+    }
+  });
+  return selected;
+}
+
 module.exports = {
   standupInfoBlob,
   collectUserStandups,
   standupQuestions,
+  collectTimeMatchedChannels,
 };

@@ -1,55 +1,34 @@
-//
-// this process kicks off the reporting process for all channels
-//
-
-const log = require('../logger')('custom:report_runner:');
+const log = require('../logger')('custom:getReportsRunner');
 const _ = require('lodash');
-const timeHelper = require('../helpers/time.js');
-const doChannelReport = require('../helpers/doChannelReport.js');
+const timeHelper = require('../helpers/time');
+const ChannelReportHelper = require('../helpers/doChannelReport');
 const fedHolidays = require('@18f/us-federal-holidays');
+const common = require('../helpers/common');
+const Channel = require('../repositories/channel');
 
-function collectTimeMatchedChannels(channels, where) {
-  const selected = [];
-  _.each(channels, (channel) => {
-    if (_.isEmpty(channel.standup)) {
-      return;
-    } else if (channel.standup.time === where.time && _.includes(channel.standup.days, _.capitalize(where.day))) {
-      selected.push(channel);
-    }
-  });
-  return selected;
-}
-
-function runReports(bot) {
+async function runReports(bot) {
   log.verbose('attempting to run channel standup reports :D');
 
   if (fedHolidays.isAHoliday()) {
     return;
   };
 
-  const where = {
+  const timeAndDay = {
     time: timeHelper.getScheduleFormat(),
     day: timeHelper.getScheduleDay()
   };
+  const allChannels = await Channel.getAll(bot);
+  const selectedChannels = await common.collectTimeMatchedChannels(allChannels, timeAndDay, 'report');
 
-  bot.botkit.storage.channels.all(async (err, channels) => {
-    if (err) {
-      log.error(`encountered error trying to get all channels: ${err}`);
-      return;
-    }
-
-    const selected_channels = await collectTimeMatchedChannels(channels, where);
-
-    if (selected_channels.length > 0) {
-      log.info(`reporting standups for ${channels.length} channel(s)`);
-      _.each(selected_channels, (channel) => {
-        log.verbose(`starting to run channel report for ${channel.id}`);
-        doChannelReport(bot, channel.id);
-      });
-    } else {
-      log.verbose(`there are no channels eligible for reporting - PEACE`);
-    }
-  });
+  if (selectedChannels.length > 0) {
+    log.info(`reporting standups for ${selectedChannels.length} channel(s)`);
+    _.each(selectedChannels, (channel) => {
+      log.verbose(`starting to run channel report for ${channel.id}`);
+      ChannelReportHelper.doChannelReport(bot, channel);
+    });
+  } else {
+    log.verbose(`there are no channels eligible for reporting - PEACE`);
+  }
 }
 
 module.exports = function (bot) {

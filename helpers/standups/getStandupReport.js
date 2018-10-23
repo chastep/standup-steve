@@ -1,4 +1,4 @@
-const log = require('../../logger')('custom:get_standup_report:');
+const log = require('../../logger')('custom:getStandupReport');
 
 module.exports = function getStandupReport(standup) {
   const color = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));

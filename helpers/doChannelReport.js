@@ -1,13 +1,10 @@
-//
-// this process kicks off the reporting process for all channels
-// can either create a new report process or update and exiting channel report
-//
-
 const async = require('async');
 const _ = require('lodash');
-const log = require('../logger')('custom:do_channel_report:');
-const timeHelper = require('./time.js');
-const createNewChannelReport = require('./createChannelReport.js');
+const log = require('../logger')('custom:doChannelReport');
+const timeHelper = require('./time');
+const createNewChannelReport = require('./createChannelReport');
+const Channel = require('../repositories/channel');
+const Standup = require('../repositories/standup');
 
 function gatherTodaysStandups(standups) {
   const todaysStandups = [];
@@ -21,27 +18,31 @@ function gatherTodaysStandups(standups) {
   return todaysStandups;
 }
 
-module.exports = function doChannelReport(bot, channel_id) {
-  log.verbose(`attempting to run standup report for ${channel_id}`);
+async function doChannelReport(bot, channel) {
+  log.verbose(`attempting to run standup report for #${channel.name}`);
 
-  bot.botkit.storage.channels.get(channel_id, (err, channel) => {
-    if (!channel) {
-      log.error(`channel is not present: ${err}`);
-    } else {
-      log.info('channel is present');
-      bot.botkit.storage.standups.all((err, standups) => {
-        if (err) {
-          log.error(`encountered error trying to get all standups: ${err}`);
-        }
-        const reportableStandups = gatherTodaysStandups(standups);
-        async.series([
-          function (callback) {
-            log.info(`creating channel standup report`);
-            createNewChannelReport(bot, channel, reportableStandups);
-            callback(null);
-          }, function () {},
-        ]);
-      });
-    }
-  });
-}
+  const currentChannel = await Channel.getById(bot, channel.id);
+  log.info('channel is present');
+
+  const allStandups = await Standup.getAll(bot);
+  let reportableStandups = [];
+
+  if (allStandups) {
+    reportableStandups = await gatherTodaysStandups(allStandups);
+  } else {
+    log.warn('there are no standups in the db');
+    return;
+  }
+
+  async.series([
+    function (callback) {
+      log.info(`creating channel standup report`);
+      createNewChannelReport(bot, currentChannel, reportableStandups);
+      callback(null);
+    }, function () {},
+  ]);
+};
+
+module.exports = {
+  doChannelReport,
+};

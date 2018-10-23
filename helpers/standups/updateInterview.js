@@ -1,12 +1,11 @@
-const log = require('../../logger')('custom:update_interview:');
-const timeHelper = require('../time.js');
+const log = require('../../logger')('custom:updateInterview');
+const timeHelper = require('../time');
 const _ = require('lodash');
-const getStandupReport = require('./getStandupReport.js');
-const common = require('../common.js');
+const getStandupReport = require('./getStandupReport');
+const common = require('../common');
 const Channel = require('../../repositories/channel');
 const User = require('../../repositories/user');
 const Standup = require('../../repositories/standup');
-
 
 function updateStandup(answers, standupToUpdate) {
   const standup = standupToUpdate;

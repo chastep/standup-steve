@@ -1,5 +1,5 @@
-const log = require('../logger')('custom:startDmEmojiInterview:');
-const interviewHelper = require('../helpers/standups/doInterview.js');
+const log = require('../logger')('custom:startDmEmojiInterview');
+const interviewHelper = require('../helpers/standups/doInterview');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
 

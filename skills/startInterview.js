@@ -1,9 +1,5 @@
-//
-// starts an interview with a user if they directly mention the bot with the chat `interview` as well
-//
-
-const log = require('../logger')('custom:start_interview:');
-var doInterview = require('../helpers/standups/doInterview.js');
+const log = require('../logger')('custom:startInterview');
+const doInterview = require('../helpers/standups/doInterview');
 
 function attachSkill(controller) {
   controller.hears([/\binterview\b/i],['direct_message'], (bot, message) => {

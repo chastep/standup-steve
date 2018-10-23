@@ -1,6 +1,6 @@
-const log = require('../logger')('custom:get_standup:');
-const timeHelper = require('../helpers/time.js');
-const common = require('../helpers/common.js');
+const log = require('../logger')('custom:getStandup');
+const timeHelper = require('../helpers/time');
+const common = require('../helpers/common');
 const _ = require('lodash');
 const Channel = require('../repositories/channel');
 
