@@ -54,3 +54,6 @@ Decided to use MongoDB to mix it up a bit honestly. Botkit also had a nifty [Mon
 * [Heroku Node Project Deployment](https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app)
 * I highly recomend using [mLab](https://www.mlab.com/) in tandum with Heroku, makes for easy visualization of data.
 
+## Main
+- [README](../README.md)
+

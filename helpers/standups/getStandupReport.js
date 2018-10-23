@@ -1,7 +1,3 @@
-//
-// compiles a report for a individual standup
-//
-
 const log = require('../../logger')('custom:get_standup_report:');
 
 module.exports = function getStandupReport(standup) {

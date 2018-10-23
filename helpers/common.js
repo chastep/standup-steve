@@ -1,4 +1,5 @@
 const timeHelper = require('./time.js');
+const _ = require('lodash');
 
 function standupInfoBlob(channel) {
   return (
@@ -11,16 +12,37 @@ function standupInfoBlob(channel) {
   )
 }
 
-async function collectUserInfo(bot, userId) {
-  return await bot.botkit.storage.users.get(userId, async (err, response) => {
-    if (err) {
-      bot.reply(message, `I experienced an error finding user: ${err}`);
-      log.error(`user does not exist ${err}`);
+function collectUserStandups(standups, interviewUserId) {
+  let selected = [];
+  _.each(standups, (standup) => {
+    if (standup.user === interviewUserId) {
+      selected.push(standup);
     }
-  });
+  })
+  return selected;
 };
 
+const standupQuestions = [
+  {
+    question: 'What did you do yesterday?',
+    name: 'yesterday'
+  },
+  {
+    question: `What are you doing today?`,
+    name: 'today'
+  },
+  {
+    question: `What are your blockers?`,
+    name: 'blockers'
+  },
+  {
+    question: 'WFH today/part of today?',
+    name: 'wfh'
+  }
+];
+
 module.exports = {
-  collectUserInfo,
   standupInfoBlob,
+  collectUserStandups,
+  standupQuestions,
 };

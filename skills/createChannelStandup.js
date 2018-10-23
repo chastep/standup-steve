@@ -1,9 +1,3 @@
-//
-// this process will create a daily standup that:
-// 1. creates a standup object (with relevant attributes)
-// 2. saves it in storage (with relevant attributes)
-//
-
 const log = require('../logger')('custom:create_channel_standup');
 const timeHelper = require('../helpers/time.js');
 const common = require('../helpers/common.js');

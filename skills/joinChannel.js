@@ -1,8 +1,3 @@
-//
-// this process will attempt to join a channel
-// and create a channel if it isn't present
-//
-
 const log = require('../logger')('custom:join_channel:');
 const _ = require('lodash');
 const Channel = require('../repositories/channel');

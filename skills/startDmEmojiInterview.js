@@ -1,61 +1,47 @@
-//
-// starts an interview with a user if they add emoji to channel reminder message
-//
-
 const log = require('../logger')('custom:startDmEmojiInterview:');
-var doInterview = require('../helpers/standups/doInterview.js');
+const interviewHelper = require('../helpers/standups/doInterview.js');
+const Channel = require('../repositories/channel');
+const User = require('../repositories/user');
 
-// needs to be tested
-function createNewUser(bot, userId) {
-  bot.api.users.info({ user: userId }, async (err, response) => {
-    if (err) {
-      bot.reply(message, `I experienced an error finding user: ${err}`);
-      log.error(err);
-    }
+// TODO: user test
+async function createNewUser(bot, userId) {
+  const userInfo = await User.getInfo(bot, userId);
 
-    var newUser = {};
-    newUser.id = response.user.id;
-    newUser.realName = response.user.real_name || response.user.name;
-    newUser.timezone = response.user.tz;
-    newUser.thumbUrl = response.user.profile.image_72;
+  if (userInfo.deleted) {
+    log.info('user has been deleted');
+    return;
+  }
 
-    await bot.botkit.storage.users.save(newUser, (err, savedUser) => {
-      if (err) {
-        bot.reply(message, `I experienced an error saving user: ${err}`);
-        log.error(err);
-      } else {
-        log.info('user has been successfully saved');
-        log.info(savedUser);
-      }
-    });
-  });
+  const newUser = {};
+  newUser.id = response.userInfo.id;
+  newUser.realName = response.userInfo.real_name || response.userInfo.name;
+  newUser.timezone = response.userInfo.tz;
+  newUser.thumbUrl = response.userInfo.profile.image_72;
+
+  const savedUser = await User.save(bot, newUser);
+
+  log.info('user has been successfully saved');
+  log.info(savedUser);
 };
 
 async function startDmEmojiInterview(bot, message) {
-  log.verbose(`Got an emoji reaction: ${message.reaction} from ${message.user}`);
+  log.verbose(`received emoji reaction: ${message.reaction} from ${message.user}`);
 
-  await bot.botkit.storage.users.get(message.user, async (err, response) => {
-    if (!response) {
-      await createNewUser(bot, message.user)
-    }
-  });
+  const currentUser = await User.getById(bot, message.user)
 
-  bot.botkit.storage.channels.get(message.item.channel, (err, channel) => {
-  	if (!channel) {
-      log.error('channel is not present!');
-    } else {
-      log.info('channel is present');
-      doInterview(bot, message.item.channel, message.user);
-    }
-  });
+  if (!currentUser) {
+    await createNewUser(bot, message.user)
+  }
+
+  const currentChannel = await Channel.getById(bot, message.item.channel);
+
+  interviewHelper.doInterview(bot, currentChannel, currentUser);
 }
 
 function attachSkill(controller) {
   controller.on(['reaction_added'], (bot, message) => {
   	bot.identifyBot((err, i) => {
-  		if (message.item_user === i.id && message.user !== i.id) {
-	      startDmEmojiInterview(bot, message);
-	    }
+  		if (message.item_user === i.id && message.user !== i.id) startDmEmojiInterview(bot, message);
   	});
   });
   log.verbose('ATTACHED');

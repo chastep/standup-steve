@@ -70,3 +70,6 @@ To edit an existing standup you can run the interview again by adding another em
 ## Get help
 
 The bot can provide a quick reference to using it.  To trigger the bot's in-Slack help, just say `help` in a DM.
+
+## Main
+- [README](../README.md)

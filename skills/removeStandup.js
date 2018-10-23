@@ -1,7 +1,3 @@
-//
-// this process will remove a daily standup for a channel, if it exists
-//
-
 const log = require('../logger')('custom:remove_standup:');
 const timeHelper = require('../helpers/time.js');
 const _ = require('lodash');

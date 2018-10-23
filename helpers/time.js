@@ -125,7 +125,7 @@ function getCurrentDate () {
 }
 
 function getCurrentReportDate () {
-  return moment.tz(timezone).format('dddd, MMM Do YYYY, h:mm a z')
+  return moment.tz(timezone).format('dddd, MMM Do YYYY, h:mma z')
 }
 
 function getReminderFormat (time, minutes) {
