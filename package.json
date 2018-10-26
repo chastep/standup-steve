@@ -1,6 +1,6 @@
 {
   "name": "standup-steve",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "A standup bot",
   "repository": {
     "type": "git",
@@ -10,13 +10,14 @@
   "scripts": {
     "start": "node bot.js",
     "reload-start": "nodemon bot.js",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "dependencies": {
     "@18f/us-federal-holidays": "^1.1.1",
     "@erdc-itl/simple-logger": "^1.1.0",
     "body-parser": "^1.15.2",
     "botkit": "^0.6.16",
+    "botkit-mock": "^0.1.11",
     "botkit-storage-mongo": "^1.0.7",
     "botkit-studio-metrics": "^0.0.2",
     "cookie-parser": "^1.4.3",

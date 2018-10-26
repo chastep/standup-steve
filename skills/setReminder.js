@@ -6,7 +6,7 @@ const Channel = require('../repositories/channel');
 async function setReminder(bot, message) {
   log.verbose(`heard a request to set a standup reminder: ${message.match[0]}`);
 
-  const reminderMinutes = message.match[2];
+  const reminderMinutes = parseInt(message.match[2]);
 
   const currentChannel = await Channel.getById(bot, message.channel);
 

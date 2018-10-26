@@ -23,6 +23,18 @@ class User {
     })
   };
 
+  static getAll(bot) {
+    return new Promise((resolve, reject) => {
+      bot.botkit.storage.users.all((error, allUsers) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(allUsers);
+        }
+      })
+    })
+  };
+
   static save(bot, user) {
     return new Promise((resolve, reject) => {
       bot.botkit.storage.users.save(user, (error, user) => {

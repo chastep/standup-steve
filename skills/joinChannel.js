@@ -32,7 +32,7 @@ function createNewUsers(bot, userIds) {
 async function fetchChannelNameFromApi(bot, message) {
   const channelInfo = await Channel.getInfo(bot, message);
 
-  await createNewUsers(bot, channelInfo.channel.members);
+  if (!channelInfo.channel.members.length === 0) await createNewUsers(bot, channelInfo.channel.members);
 
   return channelInfo.channel.name;
 }
@@ -69,6 +69,8 @@ function attachSkill(controller) {
 };
 
 module.exports = {
+  createNewUsers,
+  fetchChannelNameFromApi,
   joinChannel,
   attachSkill,
 };
