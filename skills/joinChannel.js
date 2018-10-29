@@ -1,38 +1,30 @@
 const log = require('../logger')('custom:joinChannel');
 const _ = require('lodash');
+const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
 
+// TODO: deleted user test
 function createNewUsers(bot, userIds) {
   _.each(userIds, async (userId) => {
     const userInfo = await User.getInfo(bot, userId);
-
     const currentUser = await User.getById(bot, userInfo.user.id)
 
-    if (currentUser) {
-      log.info('user already exists');
+    if (currentUser || userInfo.deleted) {
+      log.info('user already exists or has been deleted');
       return;
-    }
-
-    log.warn('user does not exist');
-
-    const newUser = {};
-    newUser.id = userInfo.user.id;
-    newUser.realName = userInfo.user.real_name || userInfo.user.name;
-    newUser.timezone = userInfo.user.tz;
-    newUser.thumbUrl = userInfo.user.profile.image_72;
-
-    const savedUser = await User.save(bot, newUser);
-
-    log.info('user has been successfully saved');
-    log.info(savedUser);
+    } else {
+      log.warn('user does not exist');
+      await common.newUser(bot, userInfo);
+      log.info('user has been successfully saved');
+    };
   })
 };
 
 async function fetchChannelNameFromApi(bot, message) {
   const channelInfo = await Channel.getInfo(bot, message);
 
-  await createNewUsers(bot, channelInfo.channel.members);
+  if (!channelInfo.channel.members.length === 0) await createNewUsers(bot, channelInfo.channel.members);
 
   return channelInfo.channel.name;
 }
@@ -69,6 +61,8 @@ function attachSkill(controller) {
 };
 
 module.exports = {
+  createNewUsers,
+  fetchChannelNameFromApi,
   joinChannel,
   attachSkill,
 };

@@ -1,5 +1,5 @@
-var moment = require('moment-timezone');
-var timezone = process.env.TIMEZONE || 'America/Chicago';
+const moment = require('moment-timezone');
+const timezone = process.env.TIMEZONE || 'America/Chicago';
 
 function getTimeFromString(str) {
   var time = str.match(/((\d+|:)*(\s)?((a|p)m)|\d{4})/gi);
@@ -90,7 +90,7 @@ function getDisplayFormat(time) {
   return moment.tz(time, 'HHmm', timezone).format('h:mm a z');
 }
 
-function getDisplayFormatForDaysOfChannel(days) {
+function getDisplayFormatForDaysOfChannel(dow) {
   const days = []
   if (process.env.WEEKEND_DEV) {
     const dow = ['Saturday','Sunday'];

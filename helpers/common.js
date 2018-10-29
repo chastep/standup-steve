@@ -1,10 +1,11 @@
 const log = require('../logger')('custom:common');
 const timeHelper = require('./time.js');
 const _ = require('lodash');
+const User = require('../repositories/user');
 
 function standupInfoBlob(channel) {
   return (
-    `:point_down: Standup Details\n`+
+    `:point_down: Standup Details :point_down:\n`+
     `~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
     `Time: ${timeHelper.getDisplayFormat(channel.standup.time)}\n`+
     `Days: ${timeHelper.getDisplayFormatForDays(channel.standup.days)}\n`+
@@ -55,6 +56,17 @@ function collectTimeMatchedChannels(channels, where, flag) {
     }
   });
   return selected;
+};
+
+async function newUser(bot, userInfo) {
+  const newUser = {};
+  newUser.id = userInfo.user.id || `user_${Math.floor(Math.random() * 1000)}`;
+  newUser.realName = userInfo.user.real_name || userInfo.user.name;
+  newUser.timezone = userInfo.user.tz;
+  newUser.thumbUrl = userInfo.user.profile.image_72;
+
+  const savedUser = await User.save(bot, newUser);
+  log.info(savedUser);
 }
 
 module.exports = {
@@ -62,4 +74,5 @@ module.exports = {
   collectUserStandups,
   standupQuestions,
   collectTimeMatchedChannels,
+  newUser,
 };

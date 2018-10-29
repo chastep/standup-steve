@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/chastep/standup-steve/tree/master.svg?style=svg)](https://circleci.com/gh/chastep/standup-steve/tree/master)
+
 # Standup Steve
 
 Let's face it, we have all been there, do you ever feel, etc. These are all great ways to start an informercial...which is what I'm going to do RIGHT NOW! 

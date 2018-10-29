@@ -24,18 +24,27 @@ async function createChannelStandup(bot, message) {
   if (schedule !== false) {
     log.info(schedule);
 
-    currentChannel.standup = createNewStandup(currentChannel, schedule);
+    currentChannel.standup = await createNewStandup(currentChannel, schedule);
 
     const updatedChannel = await Channel.save(bot, currentChannel);
 
-    bot.reply(
-      message,
-      common.standupInfoBlob(updatedChannel)+
-      `\n:thumbsup: :standup: Successfully Saved :thumbsup:`
-    );
-    log.info(`standup scheduled for #${updatedChannel.name} at ${timeHelper.getDisplayFormat(updatedChannel.standup.time)} on ${timeHelper.getDisplayFormatForDays(updatedChannel.standup.days)}`);
-    log.info(`channel has been successfully saved`);
-    log.info(updatedChannel);
+    if (updatedChannel.standup) {
+      bot.reply(
+        message,
+        common.standupInfoBlob(updatedChannel)+
+        `\n:thumbsup: :standup: Successfully Saved :thumbsup:`
+      );
+      log.info(`standup scheduled for #${updatedChannel.name} at ${timeHelper.getDisplayFormat(updatedChannel.standup.time)} on ${timeHelper.getDisplayFormatForDays(updatedChannel.standup.days)}`);
+      log.info(`channel has been successfully saved`);
+      log.info(updatedChannel);
+    } else {
+      bot.reply(
+        message,
+        'Standup has been scheduled successfully, please use command \n'+
+        '`@[bot-name] when` to check if info is correct.'
+      )
+      log.warn(`channel is missing standup info`);
+    }
   } else {
     bot.reply(message, ':x: Incorrect time format! Please try again. :x:');
     log.warn('incorrect time format');
@@ -48,6 +57,7 @@ function attachSkill(controller) {
 };
 
 module.exports = {
+  createNewStandup,
   createChannelStandup,
   attachSkill,
 }
