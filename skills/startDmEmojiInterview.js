@@ -1,27 +1,21 @@
 const log = require('../logger')('custom:startDmEmojiInterview');
 const interviewHelper = require('../helpers/standups/doInterview');
+const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
 
-// TODO: user test
+// TODO: deleted user test
 async function createNewUser(bot, userId) {
   const userInfo = await User.getInfo(bot, userId);
 
   if (userInfo.deleted) {
-    log.info('user has been deleted');
+    log.info('user already exists or has been deleted');
     return;
-  }
-
-  const newUser = {};
-  newUser.id = response.userInfo.id;
-  newUser.realName = response.userInfo.real_name || response.userInfo.name;
-  newUser.timezone = response.userInfo.tz;
-  newUser.thumbUrl = response.userInfo.profile.image_72;
-
-  const savedUser = await User.save(bot, newUser);
-
-  log.info('user has been successfully saved');
-  log.info(savedUser);
+  } else {
+    log.warn('user does not exist');
+    common.newUser(bot, userInfo);
+    log.info('user has been successfully saved');
+  };
 };
 
 async function startDmEmojiInterview(bot, message) {
@@ -30,7 +24,7 @@ async function startDmEmojiInterview(bot, message) {
   const currentUser = await User.getById(bot, message.user)
 
   if (!currentUser) {
-    await createNewUser(bot, message.user)
+    await createNewUser(bot, message.user);
   }
 
   const currentChannel = await Channel.getById(bot, message.item.channel);
@@ -48,5 +42,7 @@ function attachSkill(controller) {
 }
 
 module.exports = {
+  startDmEmojiInterview,
+  createNewUser,
   attachSkill,
 };

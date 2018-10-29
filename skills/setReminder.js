@@ -17,14 +17,23 @@ async function setReminder(bot, message) {
 
     const updatedChannel = await Channel.save(bot, currentChannel);
 
-    bot.reply(
+    if (updatedChannel.standup) {
+      bot.reply(
       message,
       common.standupInfoBlob(updatedChannel)+
       `\n:thumbsup: :standup: Successfully Updated :thumbsup:`
-    );
-    log.info(`reminder is set for ${timeHelper.getDisplayFormat(updatedChannel.standup.reminderTime)} :thumbsup:`);
-    log.info(`channel has been successfully updated`);
-    log.info(updatedChannel);
+      );
+      log.info(`reminder is set for ${timeHelper.getDisplayFormat(updatedChannel.standup.reminderTime)} :thumbsup:`);
+      log.info(`channel has been successfully updated`);
+      log.info(updatedChannel);
+    } else {
+      bot.reply(
+        message,
+        'Standup has been successfully updated, please use command \n'+
+        '`@[bot-name] when` to check if info is correct.'
+      )
+      log.warn(`channel is missing standup info`);
+    }
   } else {
     bot.reply(message, `There's no standup scheduled yet. Create one before setting a reminder time.`);
   }

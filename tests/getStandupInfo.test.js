@@ -33,7 +33,7 @@ describe('get standup info funcitonality', () => {
 
       expect(testBot.answers).not.toEqual([]);
       expect(testBot.answers[1].text).toEqual(
-        'There\'s no standup scheduled yet.',
+        `There's no standup scheduled yet.`,
       );
     });
 
@@ -43,7 +43,7 @@ describe('get standup info funcitonality', () => {
         await getStandupInfo(testBot, message2);
 
         expect(testBot.answers[3].text).toEqual(
-          ':point_down: Standup Details :point_down:\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTime: 11:00 am CDT\nDays: all weekdays\nReminder Time: 10:30 am CDT\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+          `:point_down: Standup Details :point_down:\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTime: 11:00 am CDT\nDays: all weekdays\nReminder Time: 10:30 am CDT\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
         );
     });
   });
