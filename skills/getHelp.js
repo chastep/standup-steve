@@ -3,7 +3,8 @@ const timeHelper = require('../helpers/time');
 const _ = require('lodash');
 
 function getHelp(bot, message)  {
-  log.verbose(`heard this request - ${message.match[0]}`);
+  log.info(message);
+  log.verbose(`heard this request: ${message.match[0]}`);
   
   bot.reply(message, 
     `Hello! :wave: Thanks for asking for help, sometimes this stuff can get confusing!\n`+
@@ -35,5 +36,6 @@ function attachSkill(controller) {
 };
 
 module.exports = {
+  getHelp,
   attachSkill,
 };
