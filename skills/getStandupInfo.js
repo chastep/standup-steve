@@ -25,5 +25,6 @@ function attachSkill(controller) {
 };
 
 module.exports = {
+  getStandupInfo,
   attachSkill,
 };

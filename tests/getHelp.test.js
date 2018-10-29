@@ -8,7 +8,7 @@ const testBot = controller.spawn({type: 'slack', token: 'test_token'});
 
 describe('get help funcitonality', () => {
   describe('getHelp', () => {
-    test.only('return `help message` if user direct messages `help` to bot', async () => {
+    test('return `help message` if user direct messages `help` to bot', async () => {
       const message = {
         channel: 'C0VHNJ7MF',
         match: ['help']
