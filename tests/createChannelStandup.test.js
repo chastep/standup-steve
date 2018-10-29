@@ -3,6 +3,7 @@ const { createNewStandup, createChannelStandup } = require('../skills/createChan
 const { joinChannel } = require('../skills/joinChannel');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
+const moment = require('moment-timezone');
 
 const controller = Botmock({});
 const testBot = controller.spawn({type: 'slack', token: 'test_token'});
@@ -14,7 +15,7 @@ describe('create channel standup funcitonality', () => {
         channel: 'C0VHNJ7MF'
       };
       const schedule = {
-        time: '1010',
+        time: moment.parseZone("2018-10-29T23:00:00.000-05:00"),
         days: ['Monday', 'Wednesday', 'Friday']
       }
       const testChannel = await Channel.getInfo(testBot, message)
@@ -22,8 +23,8 @@ describe('create channel standup funcitonality', () => {
 
       expect(newStandup).toEqual({
         id: 'standup_undefined',
-        time: '1800',
-        reminderTime: '1800',
+        time: '2300',
+        reminderTime: '2300',
         days: [ 'Monday', 'Wednesday', 'Friday' ]
       });
     });

@@ -1,5 +1,5 @@
-var moment = require('moment-timezone');
-var timezone = process.env.TIMEZONE || 'America/Chicago';
+const moment = require('moment-timezone');
+const timezone = process.env.TIMEZONE || 'America/Chicago';
 
 function getTimeFromString(str) {
   var time = str.match(/((\d+|:)*(\s)?((a|p)m)|\d{4})/gi);

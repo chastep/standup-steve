@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node bot.js",
     "reload-start": "nodemon bot.js",
-    "test": "jest --watch"
+    "test": "jest",
+    "watch-test": "jest --watch"
   },
   "dependencies": {
     "@18f/us-federal-holidays": "^1.1.1",
