@@ -48,6 +48,7 @@ function attachSkill(controller) {
 };
 
 module.exports = {
+  createNewStandup,
   createChannelStandup,
   attachSkill,
 }

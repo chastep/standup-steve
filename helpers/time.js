@@ -90,7 +90,7 @@ function getDisplayFormat(time) {
   return moment.tz(time, 'HHmm', timezone).format('h:mm a z');
 }
 
-function getDisplayFormatForDaysOfChannel(days) {
+function getDisplayFormatForDaysOfChannel(dow) {
   const days = []
   if (process.env.WEEKEND_DEV) {
     const dow = ['Saturday','Sunday'];
