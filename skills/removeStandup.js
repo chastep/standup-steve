@@ -29,5 +29,6 @@ function attachSkill(controller) {
 }
 
 module.exports = {
+  removeStandup,
   attachSkill,
 }
