@@ -6,7 +6,7 @@ const User = require('../repositories/user');
 const controller = Botmock({});
 const testBot = controller.spawn({type: 'slack', token: 'test_token'});
 
-describe('joinChannel funcitonality', () => {
+describe('join channel funcitonality', () => {
   describe('createNewUsers', () => {
     test('returns undefined if no userIds are provided', () => {
       expect(createNewUsers(testBot, [])).toBeUndefined();

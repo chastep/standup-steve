@@ -5,7 +5,7 @@ const _ = require('lodash');
 const Channel = require('../repositories/channel');
 
 async function getStandupInfo(bot, message) {
-  log.verbose(`heard this request - ${message.match[0]}`);
+  log.verbose(`heard this request: ${message.match[0]}`);
 
   const currentChannel = await Channel.getById(bot, message.channel);
 

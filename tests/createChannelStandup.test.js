@@ -1,12 +1,13 @@
 const Botmock = require('botkit-mock');
 const { createNewStandup, createChannelStandup } = require('../skills/createChannelStandup');
+const { joinChannel } = require('../skills/joinChannel');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
 
 const controller = Botmock({});
 const testBot = controller.spawn({type: 'slack', token: 'test_token'});
 
-describe('createChannelStandup funcitonality', () => {
+describe('create channel standup funcitonality', () => {
   describe('createNewStandup', () => {
     test('creates new standup object for channel', async () => {
       const message = {
@@ -28,49 +29,37 @@ describe('createChannelStandup funcitonality', () => {
     });
   });
 
-  // describe('fetchChannelNameFromApi', () => {
-  //   test('returns an error if message is invalid', async () => {
-  //     const message = { foo: 'bar' };
+  describe('createChannelStandup', () => {
+    test('returns undefined if a misformed schedule/time is provided', async () => {
+      const message = {
+        channel: 'C0VHNJ7MF',
+        match: ['test1','test2','test3']
+      };
 
-  //     await expect(fetchChannelNameFromApi(testBot, message)).rejects.toThrow(TypeError);
-  //   });
+      expect(await createChannelStandup(testBot, message)).toBeUndefined();
+    });
 
-  //   test('returns channel name', async () => {
-  //     const message = {
-  //       channel: 'C0HBYC9SA3'
-  //     };
+    test('creates standup for existing channel', async () => {
+      const message1 = {
+        channel: 'C0VHNJ7MF'
+      };
+      await joinChannel(testBot, message1)
 
-  //     expect(await fetchChannelNameFromApi(testBot, message)).toEqual('test1name');
-  //   });
-  // });
+      const channelsAfter = await Channel.getAll(testBot);
+      expect(channelsAfter.C0VHNJ7MF.standup).toEqual({});
 
-  // describe('joinChannel', () => {
-  //   test('returns an error if message is invalid', () => {
-  //     const message = { foo: 'bar' };
+      const message2 = {
+        channel: 'C0VHNJ7MF',
+        match:
+          [ 'create standup 11am',
+            'create',
+            '11am',
+          ]
+      };
+      await createChannelStandup(testBot, message2)
 
-  //     expect(joinChannel(testBot, message)).rejects.toThrow(TypeError);
-  //   });
-
-  //   test('creates a channel if it doesnt already exist', async () => {
-  //     const channelsBefore = await Channel.getAll(testBot);
-  //     expect(channelsBefore).toEqual({});
-
-  //     const message = {
-  //       channel: 'C0VHNJ7MF'
-  //     };
-  //     await joinChannel(testBot, message)
-
-  //     const channelsAfter = await Channel.getAll(testBot);
-  //     expect(channelsAfter).not.toEqual({});
-  //   });
-
-  //   test('returns undefined if channel already exists', async () => {
-  //     const message = {
-  //       channel: 'C0VHNJ7MF'
-  //     };
-  //     await joinChannel(testBot, message)
-      
-  //     expect(await joinChannel(testBot, message)).toBeUndefined();
-  //   });
-  // });
+      const channelsAfter2 = await Channel.getAll(testBot);
+      expect(channelsAfter2.C0VHNJ7MF.standup).not.toEqual({});
+    });
+  });
 });
