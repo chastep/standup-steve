@@ -17,7 +17,7 @@ function createNewUsers(bot, userIds) {
     log.warn('user does not exist');
 
     const newUser = {};
-    newUser.id = userInfo.user.id;
+    newUser.id = userInfo.user.id || `user_${Math.floor(Math.random() * 1000)}`;
     newUser.realName = userInfo.user.real_name || userInfo.user.name;
     newUser.timezone = userInfo.user.tz;
     newUser.thumbUrl = userInfo.user.profile.image_72;
