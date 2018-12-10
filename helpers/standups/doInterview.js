@@ -9,12 +9,12 @@ const User = require('../../repositories/user');
 const Standup = require('../../repositories/standup');
 
 async function createNewStandup(answers, interviewChannelId, interviewUserId, bot) {
-	const standup = {};
-	standup.id = interviewChannelId+'_'+interviewUserId+timeHelper.getReportFormat();
-	standup.channel = interviewChannelId;
-	standup.date = timeHelper.getReportFormat();
-	standup.user = interviewUserId;
-	standup.userInfo = await User.getById(bot, interviewUserId);
+  const standup = {};
+  standup.id = interviewChannelId+'_'+interviewUserId+timeHelper.getReportFormat();
+  standup.channel = interviewChannelId;
+  standup.date = timeHelper.getReportFormat();
+  standup.user = interviewUserId;
+  standup.userInfo = await User.getById(bot, interviewUserId);
   standup.answers = answers;
 
   return standup;
@@ -129,7 +129,7 @@ async function startPrivateInterview(bot, userStandups, interviewChannel, interv
 };
 
 async function doInterview(bot, interviewChannel, interviewUser) {
-	log.verbose(`interview with name/id: ${interviewUser.realName}/${interviewUser.id} for #${interviewChannel.name}`);
+  log.verbose(`interview with name/id: ${interviewUser.realName}/${interviewUser.id} for #${interviewChannel.name}`);
 
   const currentChannel = await Channel.getById(bot, interviewChannel.id);
   const allStandups = await Standup.getAll(bot);
