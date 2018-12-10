@@ -34,9 +34,9 @@ async function startDmEmojiInterview(bot, message) {
 
 function attachSkill(controller) {
   controller.on(['reaction_added'], (bot, message) => {
-  	bot.identifyBot((err, i) => {
-  		if (message.item_user === i.id && message.user !== i.id) startDmEmojiInterview(bot, message);
-  	});
+    bot.identifyBot((err, i) => {
+      if (message.item_user === i.id && message.user !== i.id) startDmEmojiInterview(bot, message);
+    });
   });
   log.verbose('ATTACHED');
 }
