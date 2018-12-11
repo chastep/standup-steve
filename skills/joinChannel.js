@@ -47,6 +47,7 @@ async function joinChannel(bot, message) {
   channel.name = await fetchChannelNameFromApi(bot, message);
   channel.standup = {};
   channel.reminderMinutes = 30;
+  channel.atHereAlert = true;
 
   const newChannel = await Channel.save(bot, channel);
 

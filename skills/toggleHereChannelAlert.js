@@ -1,19 +1,15 @@
-const log = require('../logger')('custom:setReminder');
+const log = require('../logger')('custom:toggleHereChannelAlert');
 const timeHelper = require('../helpers/time');
 const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
 
-async function setReminder(bot, message) {
-  log.verbose(`heard a request to set a standup reminder: ${message.match[0]}`);
-
-  const reminderMinutes = parseInt(message.match[2]);
+async function toggleHereChannelAlert(bot, message) {
+  log.verbose(`heard a request to toggle the @here channel alert: ${message.match[0]}`);
 
   const currentChannel = await Channel.getById(bot, message.channel);
 
   if (currentChannel.standup.reminderTime) {
-    const newReminderTime = timeHelper.getReminderFormat(currentChannel.standup.time, reminderMinutes);
-    currentChannel.standup.reminderTime = newReminderTime;
-    currentChannel.reminderMinutes = reminderMinutes;
+    currentChannel.atHereAlert = !currentChannel.atHereAlert;
 
     const updatedChannel = await Channel.save(bot, currentChannel);
 
@@ -23,7 +19,9 @@ async function setReminder(bot, message) {
         common.standupInfoBlob(updatedChannel)+
         `\n:thumbsup: :standup: Successfully Updated :thumbsup:`
       );
-      log.info(`reminder is set for ${timeHelper.getDisplayFormat(updatedChannel.standup.reminderTime)} :thumbsup:`);
+      (updatedChannel.atHereAlert) ?
+        log.info(`@here channel alert is enabled`) :
+        log.info(`@here channel alert is disabled`)
       log.info(`channel has been successfully updated`);
       log.info(updatedChannel);
     } else {
@@ -35,16 +33,16 @@ async function setReminder(bot, message) {
       log.warn(`channel is missing standup info`);
     }
   } else {
-    bot.reply(message, `There's no standup scheduled yet. Create one before setting a reminder time.`);
+    bot.reply(message, `There's no standup scheduled yet. Create one before toggling channel alert functionality.`);
   }
 }
 
 function attachSkill(controller) {
-  controller.hears(['remind(er)? (\\d*)'],['direct_mention'], setReminder);
+  controller.hears(['toggle alert'],['direct_mention'], toggleHereChannelAlert);
   log.verbose('ATTACHED');
 };
 
 module.exports = {
-  setReminder,
+  toggleHereChannelAlert,
   attachSkill,
 };

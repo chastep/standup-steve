@@ -1,7 +1,7 @@
 const Botmock = require('botkit-mock');
 const { joinChannel } = require('../skills/joinChannel');
-const { setReminder } = require('../skills/setReminder');
 const { createChannelStandup } = require('../skills/createChannelStandup');
+const { toggleHereChannelAlert } = require('../skills/toggleHereChannelAlert');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
 
@@ -14,9 +14,9 @@ const message1 = {
 const message2 = {
   channel: 'C0VHNJ7MF',
   match:
-    [ 'reminder 15',
-      'reminder',
-      '15'
+    [ 'toggle alert',
+      'toggle',
+      'alert'
     ]
 };
 const message3 = {
@@ -28,31 +28,25 @@ const message3 = {
     ]
 };
 
-describe.only('set channel reminder time', () => {
+describe.only('toggle here channel alert', () => {
   test('replies that there is no standup scheduled if standup is not present', async () => {
     await joinChannel(testBot, message1);
-    await setReminder(testBot, message2);
+    await toggleHereChannelAlert(testBot, message2);
 
     expect(testBot.answers).not.toEqual([]);
-    expect(testBot.answers[1].text).toEqual(
-      `There's no standup scheduled yet. Create one before setting a reminder time.`
-    );
+    expect(testBot.answers[1].text).toEqual(`There's no standup scheduled yet. Create one before toggling channel alert functionality.`);
   });
 
-  test('sets standup reminder time for existing channel if configured', async () => {
+  test('sets channel alert for an existing channel', async () => {
     await joinChannel(testBot, message1);
     await createChannelStandup(testBot, message3)
 
     const channelsAfter1 = await Channel.getAll(testBot);
-    expect(channelsAfter1.C0VHNJ7MF.standup.reminderTime).toEqual('1030');
+    expect(channelsAfter1.C0VHNJ7MF.atHereAlert).toEqual(true);
 
-    await setReminder(testBot, message2);
+    await toggleHereChannelAlert(testBot, message2);
 
     const channelsAfter2 = await Channel.getAll(testBot);
-    expect(channelsAfter1.C0VHNJ7MF.standup.reminderTime).toEqual('1045');
-
-    expect(testBot.answers[3].text).toEqual(
-      'Standup has been successfully updated, please use command \n`@[bot-name] when` to check if info is correct.'
-    );
+    expect(channelsAfter1.C0VHNJ7MF.atHereAlert).toEqual(false);
   });
 });
