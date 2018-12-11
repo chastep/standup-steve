@@ -7,6 +7,15 @@ const moment = require('moment-timezone');
 
 const controller = Botmock({});
 const testBot = controller.spawn({type: 'slack', token: 'test_token'});
+const data = {
+  'ok': true,
+  'channel': {
+    'id': 'C0VHNJ7MF',
+    'name': 'test1name'
+  }
+}
+
+testBot.api.setData('conversations.info', data);
 
 describe('create channel standup funcitonality', () => {
   describe('createNewStandup', () => {
