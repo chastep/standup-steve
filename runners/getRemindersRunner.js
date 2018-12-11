@@ -23,9 +23,10 @@ async function runReminders(bot) {
     log.info(`sending reminders for ${selectedChannels.length} channel(s)`);
 
     _.each(selectedChannels, (channel) => {
+      const alert = (channel.atHereAlert) ? `<!here> ` : ``;
       const reminder = {
         text: 
-          `<!here> :hourglass: There's a standup in ${channel.reminderMinutes} minutes! :hourglass:\n`+
+          `${alert}:hourglass: There's a standup in ${channel.reminderMinutes} minutes! :hourglass:\n`+
           `To submit your standup add any emoji to this message and I'll DM you to get your info.`,
         attachments: [],
         channel: channel.id,

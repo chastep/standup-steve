@@ -7,9 +7,10 @@ function standupInfoBlob(channel) {
   return (
     `:point_down: Standup Details :point_down:\n`+
     `~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`+
-    `Time: ${timeHelper.getDisplayFormat(channel.standup.time)}\n`+
-    `Days: ${timeHelper.getDisplayFormatForDays(channel.standup.days)}\n`+
-    `Reminder Time: ${timeHelper.getDisplayFormat(channel.standup.reminderTime)}\n`+
+    `Time - ${timeHelper.getDisplayFormat(channel.standup.time)}\n`+
+    `Days - ${timeHelper.getDisplayFormatForDays(channel.standup.days)}\n`+
+    `Reminder Time - ${timeHelper.getDisplayFormat(channel.standup.reminderTime)}\n`+
+    `Channel Alert Enabled? - ${channel.atHereAlert}\n`+
     `~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
   )
 }
