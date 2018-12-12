@@ -23,7 +23,6 @@ async function startPrivateUpdateInterview(bot, interviewChannel, interviewUser,
       blockers: null,
       wfh: null
     };
-    console.log(userStandupToUpdate);
     const sections = [
       {
         question: 'What did you do yesterday?',

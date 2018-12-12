@@ -7,19 +7,6 @@ const createNewChannelReport = require('./createChannelReport');
 const Channel = require('../repositories/channel');
 const Standup = require('../repositories/standup');
 
-// function gatherTodaysStandups(standups, channel) {
-//   const todaysStandups = [];
-
-//   _.each(standups, (standup) => {
-//     console.log(standup)
-//     if (timeHelper.datesAreSameDay(standup.date, new Date()) && standup.channel === channel.name) {
-//       todaysStandups.push(standup);
-//     }
-//   });
-
-//   return todaysStandups;
-// }
-
 async function doChannelReport(bot, channel) {
   log.verbose(`attempting to run standup report for #${channel.name}`);
 
