@@ -2,21 +2,23 @@ const async = require('async');
 const _ = require('lodash');
 const log = require('../logger')('custom:doChannelReport');
 const timeHelper = require('./time');
+const common = require('./common');
 const createNewChannelReport = require('./createChannelReport');
 const Channel = require('../repositories/channel');
 const Standup = require('../repositories/standup');
 
-function gatherTodaysStandups(standups) {
-  const todaysStandups = [];
+// function gatherTodaysStandups(standups, channel) {
+//   const todaysStandups = [];
 
-  _.each(standups, (standup) => {
-    if (timeHelper.datesAreSameDay(standup.date, new Date())) {
-      todaysStandups.push(standup);
-    }
-  });
+//   _.each(standups, (standup) => {
+//     console.log(standup)
+//     if (timeHelper.datesAreSameDay(standup.date, new Date()) && standup.channel === channel.name) {
+//       todaysStandups.push(standup);
+//     }
+//   });
 
-  return todaysStandups;
-}
+//   return todaysStandups;
+// }
 
 async function doChannelReport(bot, channel) {
   log.verbose(`attempting to run standup report for #${channel.name}`);
@@ -28,7 +30,7 @@ async function doChannelReport(bot, channel) {
   let reportableStandups = [];
 
   if (allStandups) {
-    reportableStandups = await gatherTodaysStandups(allStandups);
+    reportableStandups = await common.gatherTodaysStandups(allStandups, currentChannel);
   } else {
     log.warn('there are no standups in the db');
     return;
