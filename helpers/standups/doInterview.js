@@ -29,11 +29,12 @@ async function startPrivateInterview(bot, userStandups, interviewChannel, interv
       blockers: null,
       wfh: null
     };
+    const lastUserStandup = userStandups[userStandups.length - 1];
 
     if (parseFloat(timeHelper.getScheduleFormat()) >= parseFloat(interviewChannel.standup.time)) {
       log.verbose(`${interviewChannel.name} already reported a standup today`);
       convo.say(`Look's like #${interviewChannel.name} already reported a standup today :shrug:`);
-    } else if (userStandups.length && timeHelper.datesAreSameDay(userStandups[userStandups.length - 1].date, new Date())) {
+    } else if (userStandups.length && timeHelper.datesAreSameDay(lastUserStandup.date, new Date())) {
       log.verbose(`${interviewUser.realName} already completed a standup for #${interviewChannel.name} today`);
       convo.say(`Look's like you already recorded a standup for #${interviewChannel.name}. Good Job! :thumbsup:`);
       convo.ask(
@@ -136,7 +137,7 @@ async function doInterview(bot, interviewChannel, interviewUser) {
   let userStandups = [];
 
   if (allStandups) {
-    userStandups = await common.collectUserStandups(allStandups, interviewUser.id);
+    userStandups = await common.gatherTodaysStandups(await common.collectUserStandups(allStandups, interviewUser.id), currentChannel);
   } else {
     log.warn('there are no standups in the db');
   }

@@ -70,10 +70,23 @@ async function newUser(bot, userInfo) {
   log.info(savedUser);
 }
 
+function gatherTodaysStandups(standups, channel) {
+  const todaysStandups = [];
+
+  _.each(standups, (standup) => {
+    if (timeHelper.datesAreSameDay(standup.date, new Date()) && standup.channel === channel.id) {
+      todaysStandups.push(standup);
+    }
+  });
+
+  return todaysStandups;
+}
+
 module.exports = {
   standupInfoBlob,
   collectUserStandups,
   standupQuestions,
   collectTimeMatchedChannels,
   newUser,
+  gatherTodaysStandups,
 };
