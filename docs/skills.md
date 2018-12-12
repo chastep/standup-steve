@@ -2,13 +2,13 @@
 
 ## Creating or rescheduling a standup
 
-To create a new standup or reschedule one, first ensure that the bot is in the channel that the standup is for.  Then say:
+To create a new standup or reschedule one, first ensure that the bot is in said channel. To invite the bot to the channel just send them a direct mention (ie @Standup Steve or whatever the bots username is).  Then say:
 
-`@Standup Steve schedule standup 10am`
+`@Standup Steve schedule/create standup 10am`
 
 Additionally, you can schedule the standups for just certain days of the week:
 
-`@Standup Steve schedule standup 10am M W F`
+`@Standup Steve schedule/create standup 10am M W F`
 
 Some things to note:
 
@@ -44,6 +44,12 @@ To remove a standup and stop reporting on it, in the channel, say:
 - There is no confirmation, so be sure!
 - User standups that have already been recorded will not be deleted
 - You can say "delete" instead of "remove"
+
+## Toggle the Channel Alert Functionality
+
+The bot is defaulted to send reminders out for the standup with an `@here` announcement. This can be toggled on/off by saying:
+
+`@Standup Steve toggle alert`
 
 ## Interacting with the bot
 
