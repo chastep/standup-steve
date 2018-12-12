@@ -27,6 +27,15 @@ const message3 = {
       '11am',
     ]
 };
+const data = {
+  'ok': true,
+  'channel': {
+    'id': 'C0VHNJ7MF',
+    'name': 'test1name'
+  }
+}
+
+testBot.api.setData('conversations.info', data);
 
 describe.only('toggle here channel alert', () => {
   test('replies that there is no standup scheduled if standup is not present', async () => {

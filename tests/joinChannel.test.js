@@ -36,6 +36,14 @@ describe('join channel funcitonality', () => {
       const message = {
         channel: 'C0HBYC9SA3'
       };
+      const data = {
+        'ok': true,
+        'channel': {
+          'id': 'C0VHNJ7MF',
+          'name': 'test1name'
+        }
+      }
+      await testBot.api.setData('conversations.info', data);
 
       expect(await fetchChannelNameFromApi(testBot, message)).toEqual('test1name');
     });

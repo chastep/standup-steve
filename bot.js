@@ -51,6 +51,7 @@ var controller = Botkit.slackbot({
   debug: false,
   logger: { log: bkLog },
   storage: require('botkit-storage-mongo')({ mongoUri: process.env.MONGODB_URI, tables: ['standups']}),
+  clientSigningSecret: process.env.SLACK_TOKEN,
 });
 
 var webserver = require(`${__dirname}/components/express_webserver.js`)(controller);

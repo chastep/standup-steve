@@ -2,6 +2,7 @@ const log = require('../logger')('custom:joinChannel');
 const _ = require('lodash');
 const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
+const Conversation = require('../repositories/conversation');
 const User = require('../repositories/user');
 
 // TODO: deleted user test
@@ -22,9 +23,11 @@ function createNewUsers(bot, userIds) {
 };
 
 async function fetchChannelNameFromApi(bot, message) {
-  const channelInfo = await Channel.getInfo(bot, message);
+  // depreciated => https://api.slack.com/changelog/2018-09-more-reasons-to-be-a-conversations-api-convert
+  // const channelInfo = await Channel.getInfo(bot, message);
+  // if (!channelInfo.channel.members.length === 0) await createNewUsers(bot, channelInfo.channel.members);
 
-  if (!channelInfo.channel.members.length === 0) await createNewUsers(bot, channelInfo.channel.members);
+  const channelInfo = await Conversation.getInfo(bot, message);
 
   return channelInfo.channel.name;
 }
@@ -57,7 +60,7 @@ async function joinChannel(bot, message) {
 };
 
 function attachSkill(controller) {
-  controller.on(['bot_channel_join'], joinChannel);
+  controller.on(['member_joined_channel'], joinChannel);
   log.verbose('ATTACHED');
 };
 
