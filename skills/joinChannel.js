@@ -5,28 +5,7 @@ const Channel = require('../repositories/channel');
 const Conversation = require('../repositories/conversation');
 const User = require('../repositories/user');
 
-// TODO: deleted user test
-function createNewUsers(bot, userIds) {
-  _.each(userIds, async (userId) => {
-    const userInfo = await User.getInfo(bot, userId);
-    const currentUser = await User.getById(bot, userInfo.user.id)
-
-    if (currentUser || userInfo.deleted) {
-      log.info('user already exists or has been deleted');
-      return;
-    } else {
-      log.warn('user does not exist');
-      await common.newUser(bot, userInfo);
-      log.info('user has been successfully saved');
-    };
-  })
-};
-
 async function fetchChannelNameFromApi(bot, message) {
-  // depreciated => https://api.slack.com/changelog/2018-09-more-reasons-to-be-a-conversations-api-convert
-  // const channelInfo = await Channel.getInfo(bot, message);
-  // if (!channelInfo.channel.members.length === 0) await createNewUsers(bot, channelInfo.channel.members);
-
   const channelInfo = await Conversation.getInfo(bot, message);
 
   return channelInfo.channel.name;
