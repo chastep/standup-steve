@@ -17,16 +17,20 @@ const message = {
       'create',
       '11am',
     ],
-  user: 'memeber1',
+  user: 'custom_test',
   reation: ':wave:'
 };
 
-describe.only('start DM Emoji interview funcitonality', () => {
+describe('start DM Emoji interview funcitonality', () => {
   describe('createNewUser', () => {
     test('creates new users if they dont already exist', async () => {
       const usersBefore = await User.getAll(testBot);
+      expect(usersBefore).toEqual({});
 
-      await createNewUser(testBot, 'member1')
+      let userTestInfo = await User.getInfo(testBot, message.user)
+      userTestInfo.user.id = 'custom_test';
+
+      await createNewUser(testBot, userTestInfo);
 
       const usersAfter = await User.getAll(testBot);
       expect(usersAfter).not.toEqual({});
