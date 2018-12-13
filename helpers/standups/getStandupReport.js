@@ -1,4 +1,5 @@
 const log = require('../../logger')('custom:getStandupReport');
+const emoji = require('node-emoji')
 
 module.exports = function getStandupReport(standup) {
   const color = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
@@ -34,6 +35,7 @@ module.exports = function getStandupReport(standup) {
 
   return {
     title: standup.userInfo.realName,
+    text: 'Your emoji of the day: ' + emoji.random().emoji,
     fields,
     color,
     thumb_url: standup.userInfo.thumbUrl,
