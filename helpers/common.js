@@ -45,8 +45,8 @@ const standupQuestions = [
 ];
 
 function collectTimeMatchedChannels(channels, where, flag) {
-
   const selected = [];
+
   _.each(channels, (channel) => {
     if (_.isEmpty(channel.standup)) {
       return;
@@ -56,11 +56,13 @@ function collectTimeMatchedChannels(channels, where, flag) {
       selected.push(channel);
     }
   });
+
   return selected;
 };
 
 async function newUser(bot, userInfo) {
   const newUser = {};
+
   newUser.id = userInfo.user.id || `user_${Math.floor(Math.random() * 1000)}`;
   newUser.realName = userInfo.user.real_name || userInfo.user.name;
   newUser.timezone = userInfo.user.tz;
@@ -68,6 +70,21 @@ async function newUser(bot, userInfo) {
 
   const savedUser = await User.save(bot, newUser);
   log.info(savedUser);
+}
+
+async function updateUser(bot, currentUser, userInfo) {
+  if (currentUser.realName !== userInfo.user.real_name || currentUser.realName !== userInfo.user.name) {
+    currentUser.realName = userInfo.user.real_name || userInfo.user.name;
+  }
+  if (currentUser.timezone !== userInfo.user.tz) {
+    currentUser.timezone = userInfo.user.tz;
+  }
+  if (currentUser.thumbUrl !== userInfo.user.profile.image_72) {
+    currentUser.thumbUrl = userInfo.user.profile.image_72;
+  }
+
+  await User.save(bot, currentUser);
+  log.info(currentUser);
 }
 
 function gatherTodaysStandups(standups, channel) {
@@ -89,4 +106,5 @@ module.exports = {
   collectTimeMatchedChannels,
   newUser,
   gatherTodaysStandups,
+  updateUser,
 };

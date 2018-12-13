@@ -37,7 +37,7 @@ const data = {
 
 testBot.api.setData('conversations.info', data);
 
-describe.only('toggle here channel alert', () => {
+describe('toggle here channel alert', () => {
   test('replies that there is no standup scheduled if standup is not present', async () => {
     await joinChannel(testBot, message1);
     await toggleHereChannelAlert(testBot, message2);
