@@ -4,10 +4,7 @@ const common = require('../helpers/common');
 const Channel = require('../repositories/channel');
 const User = require('../repositories/user');
 
-// TODO: deleted user test
-async function createNewUser(bot, userId) {
-  const userInfo = await User.getInfo(bot, userId);
-
+async function createNewUser(bot, userInfo) {
   if (userInfo.deleted) {
     log.info('user already exists or has been deleted');
     return;
@@ -22,10 +19,13 @@ async function startDmEmojiInterview(bot, message) {
   log.verbose(`received emoji reaction: ${message.reaction} from ${message.user}`);
 
   const currentUser = await User.getById(bot, message.user)
+  const userInfo = await User.getInfo(bot, message.user);
 
   if (!currentUser) {
-    await createNewUser(bot, message.user);
+    await createNewUser(bot, userInfo);
   }
+
+  await common.updateUser(bot, currentUser, userInfo);
 
   const currentChannel = await Channel.getById(bot, message.item.channel);
 

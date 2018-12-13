@@ -7,9 +7,10 @@ const Channel = require('../../repositories/channel');
 const User = require('../../repositories/user');
 const Standup = require('../../repositories/standup');
 
-function updateStandup(answers, standupToUpdate) {
+async function updateStandup(bot, answers, interviewUserId, standupToUpdate) {
   const standup = standupToUpdate;
   standup.answers = answers;
+  standup.userInfo = await User.getById(bot, interviewUserId);
 
   return standup;
 };
@@ -87,7 +88,7 @@ async function startPrivateUpdateInterview(bot, interviewChannel, interviewUser,
 
     convo.on('end', async function(convo) {
       if (convo.status=='completed' && !exited) {
-        let updatedStandup = await updateStandup(answers, userStandupToUpdate);
+        let updatedStandup = await updateStandup(bot, answers, interviewUser.id, userStandupToUpdate);
         updatedStandup = await Standup.save(bot, updatedStandup)
 
         log.info(updatedStandup);

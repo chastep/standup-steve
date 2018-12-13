@@ -44,7 +44,6 @@ function attachSkill(controller) {
 };
 
 module.exports = {
-  createNewUsers,
   fetchChannelNameFromApi,
   joinChannel,
   attachSkill,
