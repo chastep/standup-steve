@@ -38,8 +38,8 @@ LOG_LEVEL    | Numeric value indicating the log level.  10 is verbose, 20 is inf
 
 ## Running
 
-* Start bot - `npm start` or `npm reload-start` or `node bot.js` or `nodemon bot.js`
-  * I recomend using `npm reload-start` or `nodemon bot.js` during local development so changes are reloaded in real time.
+* Start bot - `npm run start` or `npm run reload-start` or `node bot.js` or `nodemon bot.js`
+  * I recomend using `npm run reload-start` or `nodemon bot.js` during local development so changes are reloaded in real time.
 * Have fun in Slack talking to Standup Steve!
 
 ## Disclaimers/Dependency Information

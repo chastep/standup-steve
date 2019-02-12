@@ -7,6 +7,7 @@ const common = require('../common');
 const Channel = require('../../repositories/channel');
 const User = require('../../repositories/user');
 const Standup = require('../../repositories/standup');
+const emoji = require('node-emoji')
 
 async function createNewStandup(answers, interviewChannelId, interviewUserId, bot) {
   const standup = {};
@@ -15,6 +16,7 @@ async function createNewStandup(answers, interviewChannelId, interviewUserId, bo
   standup.date = timeHelper.getReportFormat();
   standup.user = interviewUserId;
   standup.userInfo = await User.getById(bot, interviewUserId);
+  standup.emoji = emoji.random().emoji;
   standup.answers = answers;
 
   return standup;
