@@ -83,7 +83,7 @@ function hearsAll(controller) {
           bot.reply(message, response.data);
         })
         .catch((error) => {
-          console.log(error);
+          bot.reply(message, `My brain is tired from remembering all these facts...please give a second to think of some more...so sorry...`);
         })
     }
   });
