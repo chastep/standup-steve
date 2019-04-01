@@ -124,6 +124,10 @@ function getCurrentDate () {
   return moment.tz(timezone).format('YYYY-MM-DD');
 }
 
+function getCurrentShortDate () {
+  return moment.tz(timezone).format('MM/DD');
+}
+
 function getCurrentReportDate () {
   return moment.tz(timezone).format('dddd, MMM Do YYYY, h:mma z')
 }
@@ -152,6 +156,7 @@ module.exports = {
   getDisplayFormatForDaysOfChannel,
   getReportFormat,
   getCurrentDate,
+  getCurrentShortDate,
   getCurrentReportDate,
   getReminderFormat,
   datesAreSameDay,
