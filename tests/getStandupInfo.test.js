@@ -51,7 +51,7 @@ describe('get standup info funcitonality', () => {
         await getStandupInfo(testBot, message2);
 
         expect(testBot.answers[3].text).toEqual(
-          `:point_down: Standup Details :point_down:\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTime - 11:00 am CST\nDays - all weekdays\nReminder Time - 10:30 am CST\nChannel Alert Enabled? - true\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+          `:point_down: Standup Details :point_down:\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTime - 11:00 am CDT\nDays - all weekdays\nReminder Time - 10:30 am CDT\nChannel Alert Enabled? - true\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
         );
     });
   });

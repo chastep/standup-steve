@@ -1,13 +1,7 @@
-/*
-WHAT IS THIS?
-
-This module demonstrates simple uses of Botkit's `hears` handler functions.
-
-Add whatever you like, I could care less. Have fun!
-*/
-
 const log = require('../logger')('custom:hearsAll');
 const wordfilter = require('wordfilter');
+const axios = require('axios');
+const timeHelper = require('../helpers/time');
 
 function hearsAll(controller) {
   const stats = {
@@ -23,13 +17,6 @@ function hearsAll(controller) {
     stats.convos++;
   });
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* Utility function to format uptime */
   function formatUptime(uptime) {
     let unit = 'second';
     if (uptime > 60) {
@@ -73,9 +60,6 @@ function hearsAll(controller) {
     }
   });
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~CUSTOM~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   controller.hears(['^do you like sand?'],['direct_message,direct_mention'], (bot, message) => {
     if (message.match[0]) {
       bot.reply(message, `I don't like sand. It's coarse, and rough, and irritating, and it gets everywhere.`);
@@ -87,10 +71,22 @@ function hearsAll(controller) {
       bot.reply(message, `https://media.giphy.com/media/Nx0rz3jtxtEre/giphy-downsized.gif`);
     }
   });
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~CUSTOM~~~~~~~~~~~~~~~ */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+  controller.hears(['^random fact'],['direct_message,direct_mention'], (bot, message) => {
+    if (message.match[0]) {
+      const monthAndDay = timeHelper.getCurrentShortDate();
+      const url = `http://numbersapi.com/${monthAndDay}/date`;
+
+      axios
+        .get(url)
+        .then(function (response) {
+          bot.reply(message, response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+  });
 };
 
 function attachSkill(controller) {
