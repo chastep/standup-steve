@@ -16,7 +16,7 @@
   "dependencies": {
     "@18f/us-federal-holidays": "^1.2.0",
     "@erdc-itl/simple-logger": "^1.1.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.15.2",
     "botkit": "^0.6.21",
     "botkit-mock": "^0.1.11",
