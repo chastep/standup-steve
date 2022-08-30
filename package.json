@@ -34,7 +34,7 @@
     "express-hbs": "^1.0.4",
     "hoek": "^5.0.4",
     "lodash": "^4.17.15",
-    "moment-timezone": "^0.5.23",
+    "moment-timezone": "^0.5.35",
     "mongodb": "^3.1.10",
     "node-emoji": "^1.8.1",
     "node-env-file": "^0.1.8",
